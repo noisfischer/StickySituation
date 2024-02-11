@@ -9,6 +9,9 @@
 
 class USpringArmComponent;
 class UCameraComponent;
+class UStaticMeshComponent;
+class USkeletalMeshComponent;
+class UCapsuleComponent;
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
@@ -20,54 +23,80 @@ class APlayerCharacterBase : public ACharacter
 {
 	GENERATED_BODY()
 
-	/** Camera boom positioning the camera behind the character */
+
+	// COMPONENT DECLARATIONS TO BE INITIALIZED IN CONSTRUCTOR //
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* CameraBoom;
-
-	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
-	
-	/** MappingContext */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* Backpack_Mesh;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
+	USkeletalMeshComponent* ProjectileWeapon_Mesh;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
+	USkeletalMeshComponent* MeleeWeapon_Mesh;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
+	UCapsuleComponent* MeleeWeapon_Collision;
+
+
+	// ENHANCED INPUT MAPPINGS TO BE SET IN CHILD BP //
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext;
-
-	/** Jump Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* JumpAction;
-
-	/** Move Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* MoveAction;
-
-	/** Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	
 public:
+	// CONSTRUCTOR
 	APlayerCharacterBase();
+
+
+	// HEALTH ATTRIBUTES //
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="1 - HEALTH")
+	float MaxHealth = 100;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="1 - HEALTH")
+	float CurrentHealth = MaxHealth;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="1 - HEALTH")
+	bool Dead = false;
+
+
+	// AMMO //
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="2 - AMMO")
+	float RedAmmo = 1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="2 - AMMO")
+	float GreenAmmo = 1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="2 - AMMO")
+	float BlueAmmo = 1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="2 - AMMO")
+	float YellowAmmo = 1;
+	
+
+	// SOCKET NAMES FOR ATTACHMENT TO SKELETAL MESH //
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="3 - SOCKET NAMES")
+	FName Backpack_SocketName = "BackpackSocket";
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="3 - SOCKET NAMES")
+	FName MeleeWeapon_SocketName = "LeftHandSocket";
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="3 - SOCKET NAMES")
+	FName ProjectileWeapon_SocketName = "RightHandSocket";
 	
 
 protected:
 
-	/** Called for movement input */
+	// ENHANCED INPUT FUNCTION BINDINGS
 	void Move(const FInputActionValue& Value);
-
-	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 			
 
 protected:
-	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
-	// To add mapping context
-	virtual void BeginPlay();
+	virtual void BeginPlay() override;
 
 public:
-	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 };
 
