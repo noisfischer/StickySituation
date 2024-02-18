@@ -1,0 +1,48 @@
+body {
+  overflow: clip;
+}
+
+body, p, button {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight);
+  font-size: var(--font-size);
+  color: var(--font-color);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  font-family: var(--font-family-display);
+}
+h1 {
+  font-size: 1.5rem;
+}
+h2, h3, h4, h5, h6 {
+  font-size: 1.25rem;
+}
+
+body {
+  width: 100dvw;
+  height: 100dvh;
+  background-color: #10121b;
+}
+
+[data-hidden="true"] { 
+  display: none !important;
+}
+[data-visible="false"] { 
+  visibility: hidden;
+}
+
+.sr, [data-invisible="true"] { 
+  // Contain text within 1px box
+  height: 1px; 
+  overflow: hidden;
+  width: 1px;
+  // Keep the layout
+  position: absolute;
+  // Remove any visible trace (e.g. background color)
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%); // browsers in the future
+  // Prevent the screen reader to skip spaces between words
+  white-space: nowrap;
+}

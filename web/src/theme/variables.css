@@ -1,0 +1,33 @@
+:root {
+  --font-family: sans-serif;
+  --font-family-display: serif;
+
+  --font-color: #1a1a1a;
+  --font-weight: 300;
+  --font-size: 1rem;
+  --font-size-sm: 0.875rem;
+
+
+  --gap-sm: 0.3125rem;
+  --gap-md: 0.625rem;
+  --gap-lg: 1rem;
+  --gap-xl: 1.25rem;
+
+  --pd-sm: 0.3125rem;
+  --pd-md: 0.625rem;
+  --pd-lg: 1.25rem;
+  --pd-xl: 2.5rem;
+
+  --spacing-sm: 0.3125rem;
+  --spacing-md: 0.625rem;
+  --spacing-lg: 1.25rem;
+  --spacing-xl: 2.5rem;
+
+  --br-sm: 4px;
+  --br-md: 10px;
+  --br-lg: 20px;
+
+  --shadow-sm: 0 1px 3px 0 rgba(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0 0 0 / 0.1), 0 2px 4px -1px rgba(0 0 0 / 0.06);
+  --shadow-lg: 0 0.625rem 1.25rem 0.25rem rgb(0 0 0 / 0.3);
+}
