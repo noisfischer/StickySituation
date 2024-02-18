@@ -51,9 +51,9 @@ APlayerCharacterBase::APlayerCharacterBase()
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	// SETUP MESH ATTACHMENTS //
-	Backpack_Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Backpack"));
+	Pack_Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Backpack"));
 	if(Backpack_SocketName.IsValid())
-		Backpack_Mesh->SetupAttachment(GetMesh(), "BackpackSocket");
+		Pack_Mesh->SetupAttachment(GetMesh(), "BackpackSocket");
 
 	ProjectileWeapon_Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("ProjectileWeapon"));
 	if(ProjectileWeapon_SocketName.IsValid())
