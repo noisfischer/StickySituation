@@ -8,6 +8,7 @@
 #include "Interfaces/CharacterInterface.h"
 #include "PlayerCharacterBase.generated.h"
 
+class AProjectileBase;
 class USpringArmComponent;
 class UCameraComponent;
 class UStaticMeshComponent;
@@ -89,6 +90,8 @@ public:
 	virtual void DamagePlayer_Implementation(float Damage) override;
 
 	virtual void HealPlayer_Implementation(float Heal) override;
+
+
 	
 protected:
 
