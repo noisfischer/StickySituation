@@ -83,8 +83,23 @@ void APlayerCharacterBase::BeginPlay()
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Input
+
+// INTERFACE EVENTS //
+
+void APlayerCharacterBase::DamagePlayer_Implementation(float Damage)
+{
+	CurrentHealth -= Damage;
+	UE_LOG(LogTemp, Warning, TEXT("Player Current Health: %f"), CurrentHealth);
+}
+
+void APlayerCharacterBase::HealPlayer_Implementation(float Heal)
+{
+	CurrentHealth += Heal;
+	UE_LOG(LogTemp, Warning, TEXT("Current Health: %f"), CurrentHealth);
+}
+
+
+// INPUT EVENTS //
 
 void APlayerCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
