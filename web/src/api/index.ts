@@ -1,18 +1,135 @@
-// NOTES: we need to:
+import { middleware as securityMiddleware } from './security';
+import { isEqual, endOfDay, setDay, setMonth } from 'date-fns';
 
-// get the configuration for the daily challenge
-// get the leaderboard for the daily challenge
-// submit an entry for the daily leaderboard
-// generate consistent daily challenges (seed by date)
-// prevent duplicate entries (by user by date)
+import { monthDay as monthDayValidation } from './validation/monthDay';
+import {
+  score as scoreValidation,
+  points as pointsValidation,
+} from './validation/score';
 
-// get the overall leaderboard
-// submit an entry for the overall leaderboard
+import { daily as dailyDb } from './db/daily';
+import { users as usersDb } from './db/users';
+import { leaderboard as leaderboardDb } from './db/leaderboard';
+import { dailyArchive as dailyArchiveDb } from './db/daily-archive';
 
-// validate the json (zod) & put in safegards for the payload size
-// prevent duplicate entries
-// persist the data to a database (leveldb?)
+import { Daily } from './domain/daily';
+import { Users } from './domain/users';
+import { Leaderboard } from './domain/leaderboard';
+import { DailyArchive } from './domain/daily-archive';
 
-// track variations by character id
+import bodyParser from 'body-parser';
 
-// validate via a header? short lived token? secret?
+import {
+  MAX_ENTRIES,
+} from '@ss/constants';
+import {
+  Router,
+  type Request,
+  type Response,
+} from 'express';
+
+
+// setup domain logic with the databases
+
+const users = Users(usersDb);
+const leaderboard = Leaderboard(leaderboardDb, users, MAX_ENTRIES);
+const dailyArchive = DailyArchive(dailyArchiveDb, users);
+const daily = Daily(dailyDb, users, dailyArchive, MAX_ENTRIES);
+
+
+// setup the parser for JSON data coming into the server (used below)
+// the most we SHOULD get at this point is a formatted score
+// object:
+/*{
+  "seed": "ZZZZZZZZZZZZZZZZZZZZZ",
+  "score": 9007199254740991
+}*/
+// which is 68 bytes, so we'll limit it to 1kb just to be safe
+const json = bodyParser.json({
+  limit: '1kb',
+});
+
+
+// setup the routes, making sure they use the security middleware
+// for talking to the server
+
+const leaderboardRoute = Router();
+const dailyLeaderboardRoute = Router();
+
+leaderboardRoute.use(securityMiddleware);
+dailyLeaderboardRoute.use(securityMiddleware);
+
+
+// leaderboard logic
+
+leaderboardRoute.post('/', json, (req: Request, res: Response) => {
+  const { success } = pointsValidation.safeParse(req.body?.score);
+  if (!success) return res.status(400).json({ error: 'Invalid score' });
+  
+  leaderboard.add(req.user, req.body);
+
+  return res.json(leaderboard.toJSON());
+});
+
+leaderboardRoute.get('/', (req: Request, res: Response) => {
+  return res.json(leaderboard.toJSON());
+});
+
+
+// daily archive logic
+
+dailyLeaderboardRoute.get('/archive/:month/:day', (req: Request, res: Response) => {
+  if (daily.hasExpired()) daily.refresh();
+
+  const params = {
+    day: +req.params.day,
+    month: +req.params.month,
+  };
+  const { success } = monthDayValidation.safeParse(params);
+  if (!success) return res.status(400).json({ error: 'Invalid date' });
+  
+  const date = endOfDay(setDay(setMonth(new Date(), params.month), params.day));
+  
+  // the long way of getting today's daily
+  if (isEqual(date, daily.now())) return res.json(daily.toJSON());
+
+  // retrive from archive
+  const data = dailyArchive.toJSON(date);
+  if (!data) return res.status(404).json({ error: 'No daily found' });
+
+  res.json(data);
+});
+
+
+// daily leaderboard logic
+
+dailyLeaderboardRoute.get('/config', (req: Request, res: Response) => {
+  if (daily.hasExpired()) daily.refresh();
+  
+  return res.json(daily.toConfig());
+});
+
+dailyLeaderboardRoute.post('/', json, (req: Request, res: Response) => {
+  if (daily.hasExpired()) daily.refresh();
+  
+  const { success } = scoreValidation.safeParse(req.body);
+  if (!success) return res.status(400).json({ error: 'Invalid score' });
+
+  daily.add(req.user, req.body);
+
+  return res.json(daily.toJSON());
+});
+
+dailyLeaderboardRoute.get('/', (req: Request, res: Response) => {
+  if (daily.hasExpired()) daily.refresh();
+
+  return res.json(daily.toJSON());
+});
+
+
+// expose the routes
+
+export {
+  leaderboardRoute as leaderboard,
+  dailyLeaderboardRoute as dailyLeaderboard,
+};

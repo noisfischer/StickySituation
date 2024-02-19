@@ -23,7 +23,7 @@ TODO: render caching in production mode
 
 - Shared types reside in `packages/constants/index.ts`
 - API types reside in `src/api/types.ts`
-- steam ids `BigInt`s by default. we're treating these as strings in the API so that non-steam users can be identified with a nanoid or uuid
+- steam ids `BigInt`s by default. we're treating these as plain ints/numbers in the API. non-steam users will need to be handled differently...somehow
 
 ## Security
 
@@ -33,4 +33,4 @@ The JWT should reside in the `Authorization` header as "Bearer ${JWT}"
 
 ## DB
 
-The db is using `lowdb` and a local volume to persist a single json file. No server hosting, no latency. Brittle but quick for our use-case. We're not expecting breaking volumes of data and 
+The db is using `lowdb` and a local volume to persist a single json file. No additional server hosting, no latency. Brittle but quick for our use-case. We're not expecting breaking volumes of user data (and if we do, hurray! we'll scale then)
