@@ -25,12 +25,46 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* SlingshotAction = nullptr;	// MUST BE ASSIGNED IN CHILD BP //
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Slingshot")
-	float FOVValue = 90;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* AmmoSlotAction_1 = nullptr;	// MUST BE ASSIGNED IN CHILD BP //
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* AmmoSlotAction_2 = nullptr;	// MUST BE ASSIGNED IN CHILD BP //
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* AmmoSlotAction_3 = nullptr;	// MUST BE ASSIGNED IN CHILD BP //
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* AmmoSlotAction_4 = nullptr;	// MUST BE ASSIGNED IN CHILD BP //
+
+
+	// SLINGSHOT ATTRIBUTES //
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Slingshot")
+	float ChargeValue = 0;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Slingshot")
+	bool bChargeFull = false;
+
+	
+	// USED TO SET THE CURRENT AMMO TYPE //
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
 	TSubclassOf<AProjectileBase> ProjectileClass;
 
+	
+	// SFX - assign in child BP //
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SFX")
+	USoundBase* SlingshotPull = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SFX")
+	USoundBase* SlingshotFullCharge = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SFX")
+	USoundBase* SlingshotFired = nullptr;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SFX")
+	USoundBase* SwitchAmmo = nullptr;
+
+	
 
 protected:
 
@@ -43,6 +77,13 @@ protected:
 	void StartSlingshotPull();
 	void ChargeSlingshot();
 	void FireSlingshot();
-	void SpawnProjectile();
+	void SpawnProjectile(float Multiplier);
+
+	void EquipAmmoSlot1();
+	void EquipAmmoSlot2();
+	void EquipAmmoSlot3();
+	void EquipAmmoSlot4();
+
+	void PlaySound(USoundBase* Sound);
 	
 };

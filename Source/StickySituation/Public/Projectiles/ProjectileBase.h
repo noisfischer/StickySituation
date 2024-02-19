@@ -5,12 +5,13 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/ArrowComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Interfaces/CharacterInterface.h"
 #include "ProjectileBase.generated.h"
 
 class UNiagaraSystem;
 
 UCLASS()
-class STICKYSITUATION_API AProjectileBase : public AActor
+class STICKYSITUATION_API AProjectileBase : public AActor, public ICharacterInterface
 {
 	GENERATED_BODY()
 
@@ -35,6 +36,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "4 - SFX")
 	USoundBase* ProjectileImpactSound;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="5 - DAMAGE")
+	float BaseDamage = 0;
 
 	// BOUND TO "OnComponentHit" OF "ProjectileMesh" //
 	UFUNCTION()
@@ -46,7 +49,17 @@ public:
 		const FHitResult& Hit
 		);
 
-	
+	UFUNCTION()
+	float GetBaseDamage();
+
+	UFUNCTION()
+	virtual void SetBaseDamage(float ChargeValue);
+
+	UFUNCTION()
+	float GetCurrentSpeed();
+
+	UFUNCTION()
+	virtual void SetCurrentSpeed(float ChargeValue);
 
 protected:
 	virtual void BeginPlay() override;

@@ -18,6 +18,8 @@ class STICKYSITUATION_API ICharacterInterface
 	GENERATED_BODY()
 
 public:
+
+	// DAMAGE AND HEALTH EVENTS //
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void DamagePlayer(float Damage);
 

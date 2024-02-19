@@ -22,8 +22,8 @@ AProjectileBase::AProjectileBase()
 	// SETUP PROJECTILE COMPONENT W/NO SPEED NOR GRAVITY
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 	ProjectileMovementComponent->SetUpdatedComponent(RootComponent);
-	ProjectileMovementComponent->InitialSpeed = 1000.f;
 	ProjectileMovementComponent->MaxSpeed = 1000.f;
+	ProjectileMovementComponent->InitialSpeed = ProjectileMovementComponent->MaxSpeed;
 	ProjectileMovementComponent->ProjectileGravityScale = 0.f;
 	ProjectileMovementComponent->bRotationFollowsVelocity = true;
 	ProjectileMovementComponent->bShouldBounce = false;
@@ -91,4 +91,25 @@ void AProjectileBase::OnHit(UPrimitiveComponent* HitComponent, AActor* HitActor,
 
 		this->Destroy();
 	}
+}
+
+float AProjectileBase::GetBaseDamage()
+{
+	return BaseDamage;
+}
+
+void AProjectileBase::SetBaseDamage(float ChargeValue)
+{
+	BaseDamage = BaseDamage * ChargeValue;
+}
+
+float AProjectileBase::GetCurrentSpeed()
+{
+	return ProjectileMovementComponent->MaxSpeed;
+}
+
+void AProjectileBase::SetCurrentSpeed(float ChargeValue)
+{
+	ProjectileMovementComponent->MaxSpeed = GetCurrentSpeed() * ChargeValue;
+	ProjectileMovementComponent->InitialSpeed = ProjectileMovementComponent->MaxSpeed;
 }

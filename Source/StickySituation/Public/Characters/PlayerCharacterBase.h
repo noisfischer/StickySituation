@@ -25,23 +25,7 @@ class APlayerCharacterBase : public ACharacter, public ICharacterInterface
 {
 	GENERATED_BODY()
 
-
-	// COMPONENT DECLARATIONS TO BE INITIALIZED IN CONSTRUCTOR //
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* CameraBoom;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* FollowCamera;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-	UStaticMeshComponent* Pack_Mesh;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-	USkeletalMeshComponent* ProjectileWeapon_Mesh;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-	USkeletalMeshComponent* MeleeWeapon_Mesh;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-	UCapsuleComponent* MeleeWeapon_Collision;
-
-
-	// ENHANCED INPUT MAPPINGS TO BE SET IN CHILD BP //
+	// ENHANCED INPUT MAPPINGS TO BE SET IN CHILD BP (private, by default) //
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -53,9 +37,23 @@ class APlayerCharacterBase : public ACharacter, public ICharacterInterface
 
 	
 public:
-	// CONSTRUCTOR
+	// CONSTRUCTOR DECLARATION //
 	APlayerCharacterBase();
 
+	// COMPONENT DECLARATIONS TO BE INITIALIZED IN CONSTRUCTOR //
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
+	USpringArmComponent* CameraBoom;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
+	UCameraComponent* FollowCamera;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Mesh)
+	UStaticMeshComponent* Pack_Mesh;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Mesh)
+	USkeletalMeshComponent* ProjectileWeapon_Mesh;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Mesh)
+	USkeletalMeshComponent* MeleeWeapon_Mesh;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Mesh)
+	UCapsuleComponent* MeleeWeapon_Collision;
+	
 
 	// HEALTH ATTRIBUTES //
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="1 - HEALTH")
