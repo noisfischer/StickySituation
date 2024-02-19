@@ -10,6 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Projectiles/ProjectileBase.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -66,6 +67,7 @@ APlayerCharacterBase::APlayerCharacterBase()
 	MeleeWeapon_Collision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("MeleeWeaponCollision"));
 	MeleeWeapon_Collision->SetupAttachment(MeleeWeapon_Mesh);
 	MeleeWeapon_Collision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	
 }
 
 void APlayerCharacterBase::BeginPlay()
@@ -83,8 +85,24 @@ void APlayerCharacterBase::BeginPlay()
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Input
+
+// INTERFACE EVENTS //
+
+void APlayerCharacterBase::DamagePlayer_Implementation(float Damage)
+{
+	CurrentHealth -= Damage;
+	UE_LOG(LogTemp, Warning, TEXT("Player Current Health: %f"), CurrentHealth);
+}
+
+void APlayerCharacterBase::HealPlayer_Implementation(float Heal)
+{
+	CurrentHealth += Heal;
+	UE_LOG(LogTemp, Warning, TEXT("Current Health: %f"), CurrentHealth);
+}
+
+
+
+// INPUT EVENTS //
 
 void APlayerCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {

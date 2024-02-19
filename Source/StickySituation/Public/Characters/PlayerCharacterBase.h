@@ -5,8 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "Interfaces/CharacterInterface.h"
 #include "PlayerCharacterBase.generated.h"
 
+class AProjectileBase;
 class USpringArmComponent;
 class UCameraComponent;
 class UStaticMeshComponent;
@@ -19,7 +21,7 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class APlayerCharacterBase : public ACharacter
+class APlayerCharacterBase : public ACharacter, public ICharacterInterface
 {
 	GENERATED_BODY()
 
@@ -82,8 +84,15 @@ public:
 	FName MeleeWeapon_SocketName = "LeftHandSocket";
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="3 - SOCKET NAMES")
 	FName ProjectileWeapon_SocketName = "RightHandSocket";
-	
 
+
+	// INTERFACE EVENTS //
+	virtual void DamagePlayer_Implementation(float Damage) override;
+
+	virtual void HealPlayer_Implementation(float Heal) override;
+
+
+	
 protected:
 
 	// ENHANCED INPUT FUNCTION BINDINGS
