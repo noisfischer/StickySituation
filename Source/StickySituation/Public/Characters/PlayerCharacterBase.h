@@ -6,9 +6,12 @@
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "Interfaces/CharacterInterface.h"
-#include "Projectiles/RedProjectile.h"
 #include "PlayerCharacterBase.generated.h"
 
+class AYellowProjectile;
+class ABlueProjectile;
+class AGreenProjectile;
+class ARedProjectile;
 class AProjectileBase;
 class USpringArmComponent;
 class UCameraComponent;
@@ -70,11 +73,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
 	TSubclassOf<ARedProjectile> RedProjectile;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
-	TSubclassOf<ARedProjectile> GreenProjectile;
+	TSubclassOf<AGreenProjectile> GreenProjectile;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
-	TSubclassOf<ARedProjectile> BlueProjectile;
+	TSubclassOf<ABlueProjectile> BlueProjectile;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
-	TSubclassOf<ARedProjectile> YellowProjectile;
+	TSubclassOf<AYellowProjectile> YellowProjectile;
 
 	// AMMO //
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="2 - AMMO")

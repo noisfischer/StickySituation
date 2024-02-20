@@ -7,11 +7,14 @@
 #include "Projectiles/ProjectileBase.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Projectiles/RedProjectile.h"
+#include "Projectiles/GreenProjectile.h"
+#include "Projectiles/BlueProjectile.h"
+#include "Projectiles/YellowProjectile.h"
 
 
 AJeremy::AJeremy()
 {
-	
 }
 
 void AJeremy::BeginPlay()
@@ -27,6 +30,13 @@ void AJeremy::BeginPlay()
 			InputSubsystem->AddMappingContext(JeremyInputMappingContext, 1); // Priority can be adjusted as needed
 		}
 	}
+
+	// IF START PROJECTILE NOT SELECTED IN CHILD BP //
+	if(StartProjectile != nullptr)
+		CurrentProjectile = StartProjectile;
+	else
+		CurrentProjectile = RedProjectile;
+	
 }
 
 
@@ -52,6 +62,8 @@ void AJeremy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void AJeremy::StartSlingshotPull()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Slingshot Charge Begin"));
+
+	bCharging = true;
 
 	PlaySound(SlingshotPull);
 }
@@ -81,34 +93,36 @@ void AJeremy::FireSlingshot()
 	UE_LOG(LogTemp, Warning, TEXT("Slingshot Fired"));
 	
 	SpawnProjectile(ChargeValue);	// ChargeValue USED AS DAMAGE/SPEED MULTIPLIER  //
+	PlaySound(SlingshotFired);
 
 	// RESET CHARGE VALUES //
 	ChargeValue = 0;	
 	if(bChargeFull)
 		bChargeFull = false;
 
-	PlaySound(SlingshotFired);
+	bCharging = false;
+	
 }
 
 void AJeremy::SpawnProjectile(float Multiplier)
 {
-	FVector SpawnLocation = GetActorLocation();
+	FVector SpawnLocation = GetActorLocation() + FVector(100, 100, 0);
 	FRotator SpawnRotation = FollowCamera->GetComponentRotation();
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
 	SpawnParams.Instigator = GetInstigator();
 
-	AProjectileBase* CurrentProjectile = GetWorld()->SpawnActor<AProjectileBase>
+	AProjectileBase* Projectile = GetWorld()->SpawnActor<AProjectileBase>
 		(
-		ProjectileClass,
+		CurrentProjectile,
 		SpawnLocation,
 		SpawnRotation,
 		SpawnParams
 		);
 
-	CurrentProjectile->SetCurrentSpeed(Multiplier);
-	CurrentProjectile->SetBaseDamage(Multiplier);
+	Projectile->SetCurrentSpeed(Multiplier);
+	Projectile->SetBaseDamage(Multiplier);
 	
 	if(Multiplier < 0.25)
 	{
@@ -136,42 +150,55 @@ void AJeremy::SpawnProjectile(float Multiplier)
 
 void AJeremy::EquipAmmoSlot1()
 {
-	ProjectileClass = RedProjectile;
+	if(!bCharging && CurrentProjectile != RedProjectile)
+	{
+		CurrentProjectile = RedProjectile;
 
-	PlaySound(SwitchAmmo);
+		PlaySound(SwitchAmmo);
 	
-	if(ProjectileClass)
-		UE_LOG(LogTemp, Warning, TEXT("Red Ammo selected"));
+		if(CurrentProjectile)
+			UE_LOG(LogTemp, Warning, TEXT("Red Ammo selected"));
+	}
+	
 }
 
 void AJeremy::EquipAmmoSlot2()
 {
-	ProjectileClass = GreenProjectile;
+	if(!bCharging && CurrentProjectile != GreenProjectile)
+	{
+		CurrentProjectile = GreenProjectile;
 
-	PlaySound(SwitchAmmo);
+		PlaySound(SwitchAmmo);
 	
-	if(ProjectileClass)
-		UE_LOG(LogTemp, Warning, TEXT("Green Ammo selected"));
+		if(CurrentProjectile)
+			UE_LOG(LogTemp, Warning, TEXT("Green Ammo selected"));
+	}
 }
 
 void AJeremy::EquipAmmoSlot3()
 {
-	ProjectileClass = BlueProjectile;
+	if(!bCharging && CurrentProjectile != BlueProjectile)
+	{
+		CurrentProjectile = BlueProjectile;
 
-	PlaySound(SwitchAmmo);
+		PlaySound(SwitchAmmo);
 	
-	if(ProjectileClass)
-		UE_LOG(LogTemp, Warning, TEXT("Blue Ammo selected"));
+		if(CurrentProjectile)
+			UE_LOG(LogTemp, Warning, TEXT("Blue Ammo selected"));
+	}
 }
 
 void AJeremy::EquipAmmoSlot4()
 {
-	ProjectileClass = YellowProjectile;
+	if(!bCharging && CurrentProjectile != YellowProjectile)
+	{
+		CurrentProjectile = YellowProjectile;
 	
-	PlaySound(SwitchAmmo);
+		PlaySound(SwitchAmmo);
 
-	if(ProjectileClass)
-		UE_LOG(LogTemp, Warning, TEXT("Yellow Ammo selected"));
+		if(CurrentProjectile)
+			UE_LOG(LogTemp, Warning, TEXT("Yellow Ammo selected"));
+	}
 }
 
 void AJeremy::PlaySound(USoundBase* Sound)

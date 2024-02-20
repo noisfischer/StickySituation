@@ -36,20 +36,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* AmmoSlotAction_4 = nullptr;	// MUST BE ASSIGNED IN CHILD BP //
-
-
-	// SLINGSHOT ATTRIBUTES //
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Slingshot")
-	float ChargeValue = 0;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Slingshot")
-	bool bChargeFull = false;
-
-
 	
 	// USED TO SET THE CURRENT AMMO TYPE //
-	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
-	TSubclassOf<AProjectileBase> ProjectileClass;
+	UPROPERTY(EditDefaultsOnly, Category = "2 - AMMO")
+	TSubclassOf<AProjectileBase> StartProjectile;
+	UPROPERTY(EditDefaultsOnly, Category = "2 - AMMO")
+	TSubclassOf<AProjectileBase> CurrentProjectile;
 
 
 	
@@ -74,7 +66,12 @@ protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	virtual void BeginPlay() override;
-	
+
+
+	// SLINGSHOT ATTRIBUTES //
+	float ChargeValue = 0;
+	bool bChargeFull = false;
+	bool bCharging = false;
 	
 	void StartSlingshotPull();
 	void ChargeSlingshot();
@@ -85,7 +82,7 @@ protected:
 	void EquipAmmoSlot2();
 	void EquipAmmoSlot3();
 	void EquipAmmoSlot4();
-
+	
 	void PlaySound(USoundBase* Sound);
 	
 };
