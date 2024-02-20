@@ -7,7 +7,6 @@
 #include "Projectiles/ProjectileBase.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Projectiles/ProjectileBase.h"
 
 
 AJeremy::AJeremy()
@@ -132,41 +131,47 @@ void AJeremy::SpawnProjectile(float Multiplier)
 	}
 }
 
+
+
+
 void AJeremy::EquipAmmoSlot1()
 {
-	//if(ProjectileClass != )
-	UE_LOG(LogTemp, Warning, TEXT("Ammo 1 selected"));
-	
+	ProjectileClass = RedProjectile;
+
 	PlaySound(SwitchAmmo);
 	
-	// ProjectileClass = 
+	if(ProjectileClass)
+		UE_LOG(LogTemp, Warning, TEXT("Red Ammo selected"));
 }
 
 void AJeremy::EquipAmmoSlot2()
 {
-	//if(ProjectileClass != )
-	UE_LOG(LogTemp, Warning, TEXT("Ammo 2 selected"));
+	ProjectileClass = GreenProjectile;
 
 	PlaySound(SwitchAmmo);
-	// ProjectileClass = 
+	
+	if(ProjectileClass)
+		UE_LOG(LogTemp, Warning, TEXT("Green Ammo selected"));
 }
 
 void AJeremy::EquipAmmoSlot3()
 {
-	//if(ProjectileClass != )
-	UE_LOG(LogTemp, Warning, TEXT("Ammo 3 selected"));
+	ProjectileClass = BlueProjectile;
 
 	PlaySound(SwitchAmmo);
-	// ProjectileClass = 
+	
+	if(ProjectileClass)
+		UE_LOG(LogTemp, Warning, TEXT("Blue Ammo selected"));
 }
 
 void AJeremy::EquipAmmoSlot4()
 {
-	//if(ProjectileClass != )
-	UE_LOG(LogTemp, Warning, TEXT("Ammo 4 selected"));
-
+	ProjectileClass = YellowProjectile;
+	
 	PlaySound(SwitchAmmo);
-	// ProjectileClass = 
+
+	if(ProjectileClass)
+		UE_LOG(LogTemp, Warning, TEXT("Yellow Ammo selected"));
 }
 
 void AJeremy::PlaySound(USoundBase* Sound)

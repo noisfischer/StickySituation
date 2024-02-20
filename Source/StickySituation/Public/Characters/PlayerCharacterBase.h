@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "Interfaces/CharacterInterface.h"
+#include "Projectiles/RedProjectile.h"
 #include "PlayerCharacterBase.generated.h"
 
 class AProjectileBase;
@@ -64,15 +65,28 @@ public:
 	bool Dead = false;
 
 
+
+	// ASSIGN THESE IN THE PLAYER CHILD BP //
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
+	TSubclassOf<ARedProjectile> RedProjectile;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
+	TSubclassOf<ARedProjectile> GreenProjectile;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
+	TSubclassOf<ARedProjectile> BlueProjectile;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
+	TSubclassOf<ARedProjectile> YellowProjectile;
+
 	// AMMO //
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="2 - AMMO")
-	float RedAmmo = 1;
+	int32 RedAmmo = 1;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="2 - AMMO")
-	float GreenAmmo = 1;
+	int32 GreenAmmo = 1;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="2 - AMMO")
-	float BlueAmmo = 1;
+	int32 BlueAmmo = 1;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="2 - AMMO")
-	float YellowAmmo = 1;
+	int32 YellowAmmo = 1;
+
+	;
 	
 
 	// SOCKET NAMES FOR ATTACHMENT TO SKELETAL MESH //
@@ -96,9 +110,7 @@ protected:
 	// ENHANCED INPUT FUNCTION BINDINGS
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
-			
-
-protected:
+	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void BeginPlay() override;
 

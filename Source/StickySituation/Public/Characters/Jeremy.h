@@ -18,7 +18,7 @@ public:
 	// CONSTRUCTOR //
 	AJeremy();
 
-	// JEREMY'S UNIQUE INPUT ACTIONS //
+	// INPUT ACTIONS - assign in child BP //
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputMappingContext* JeremyInputMappingContext = nullptr;
 
@@ -45,10 +45,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Slingshot")
 	bool bChargeFull = false;
 
+
 	
 	// USED TO SET THE CURRENT AMMO TYPE //
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
 	TSubclassOf<AProjectileBase> ProjectileClass;
+
 
 	
 	// SFX - assign in child BP //
