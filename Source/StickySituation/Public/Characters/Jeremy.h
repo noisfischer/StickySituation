@@ -7,36 +7,36 @@
 #include "GameEnums.h"
 #include "Jeremy.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class STICKYSITUATION_API AJeremy : public APlayerCharacterBase
 {
 	GENERATED_BODY()
 
 public:
-	// CONSTRUCTOR //
 	AJeremy();
 
-	// INPUT ACTIONS - assign in child BP //
+	// INPUT ACTIONS - assign all in child BP //
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputMappingContext* JeremyInputMappingContext = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	UInputAction* SlingshotAction = nullptr;	// MUST BE ASSIGNED IN CHILD BP //
+	UInputAction* SlingshotAction = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	UInputAction* AmmoSlotAction_1 = nullptr;	// MUST BE ASSIGNED IN CHILD BP //
+	UInputAction* AmmoSlotAction_1 = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	UInputAction* AmmoSlotAction_2 = nullptr;	// MUST BE ASSIGNED IN CHILD BP //
+	UInputAction* AmmoSlotAction_2 = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	UInputAction* AmmoSlotAction_3 = nullptr;	// MUST BE ASSIGNED IN CHILD BP //
+	UInputAction* AmmoSlotAction_3 = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	UInputAction* AmmoSlotAction_4 = nullptr;	// MUST BE ASSIGNED IN CHILD BP //
+	UInputAction* AmmoSlotAction_4 = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* GrappleAction = nullptr;
+	
 	
 	// USED TO SET THE CURRENT AMMO TYPE //
 	UPROPERTY(EditDefaultsOnly, Category = "2 - AMMO")
@@ -44,6 +44,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "2 - AMMO")
 	TSubclassOf<AProjectileBase> CurrentProjectile;
 
+
+	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UGrappleComponent* GrappleComponent;
+	*/
 
 	
 	// SFX - assign in child BP //
@@ -84,6 +88,8 @@ protected:
 	void EquipAmmoSlot2();
 	void EquipAmmoSlot3();
 	void EquipAmmoSlot4();
+
+	void Grapple();
 	
 	void PlaySound(USoundBase* Sound);
 	

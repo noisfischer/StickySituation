@@ -15,6 +15,7 @@
 
 AJeremy::AJeremy()
 {
+	/*GrappleComponent = CreateDefaultSubobject<UGrappleComponent>(TEXT("Grapple"));*/
 }
 
 void AJeremy::BeginPlay()
@@ -36,7 +37,7 @@ void AJeremy::BeginPlay()
 		CurrentProjectile = StartProjectile;
 	else
 		CurrentProjectile = RedProjectile;
-	
+		
 }
 
 
@@ -56,6 +57,9 @@ void AJeremy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 		EnhancedInputComponent->BindAction(AmmoSlotAction_2, ETriggerEvent::Triggered, this, &AJeremy::EquipAmmoSlot2);
 		EnhancedInputComponent->BindAction(AmmoSlotAction_3, ETriggerEvent::Triggered, this, &AJeremy::EquipAmmoSlot3);
 		EnhancedInputComponent->BindAction(AmmoSlotAction_4, ETriggerEvent::Triggered, this, &AJeremy::EquipAmmoSlot4);
+
+		EnhancedInputComponent->BindAction(GrappleAction, ETriggerEvent::Triggered, this, &AJeremy::Grapple);
+
 	}
 }
 
@@ -205,6 +209,13 @@ void AJeremy::EquipAmmoSlot3()
 void AJeremy::EquipAmmoSlot4()
 {
 	EquipAmmo(EAmmoType::Yellow);
+}
+
+
+void AJeremy::Grapple()
+{
+	if(GrappleComponent)
+		UE_LOG(LogTemp, Warning, TEXT("Grapple"));
 }
 
 void AJeremy::PlaySound(USoundBase* Sound)
