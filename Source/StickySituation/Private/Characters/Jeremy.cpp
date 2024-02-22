@@ -214,8 +214,7 @@ void AJeremy::EquipAmmoSlot4()
 
 void AJeremy::Grapple()
 {
-	if(GrappleComponent)
-		UE_LOG(LogTemp, Warning, TEXT("Grapple"));
+	UE_LOG(LogTemp, Warning, TEXT("Grapple"));
 }
 
 void AJeremy::PlaySound(USoundBase* Sound)
