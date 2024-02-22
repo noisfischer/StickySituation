@@ -88,8 +88,6 @@ public:
 	int32 BlueAmmo = 1;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="2 - AMMO")
 	int32 YellowAmmo = 1;
-
-	;
 	
 
 	// SOCKET NAMES FOR ATTACHMENT TO SKELETAL MESH //

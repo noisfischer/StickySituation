@@ -148,57 +148,63 @@ void AJeremy::SpawnProjectile(float Multiplier)
 
 
 
+void AJeremy::EquipAmmo(EAmmoType AmmoType)
+{
+	if(bCharging)
+		return;
+
+	TSubclassOf<AProjectileBase> DesiredProjectile = nullptr;
+	FString AmmoName;
+
+	switch(AmmoType)
+	{
+		case EAmmoType::Red:
+			DesiredProjectile = RedProjectile;
+			AmmoName = "Red";
+			break;
+
+		case EAmmoType::Green:
+			DesiredProjectile = GreenProjectile;
+			AmmoName = "Green";
+			break;
+
+		case EAmmoType::Blue:
+			DesiredProjectile = BlueProjectile;
+			AmmoName = "Blue";
+			break;
+
+		case EAmmoType::Yellow:
+			DesiredProjectile = YellowProjectile;
+			AmmoName = "Yellow";
+			break;
+	}
+
+	if(CurrentProjectile != DesiredProjectile)
+	{
+		CurrentProjectile = DesiredProjectile;
+		PlaySound(SwitchAmmo);
+		UE_LOG(LogTemp, Warning, TEXT("%s Ammo selected"), *AmmoName);
+	}
+}
+
 void AJeremy::EquipAmmoSlot1()
 {
-	if(!bCharging && CurrentProjectile != RedProjectile)
-	{
-		CurrentProjectile = RedProjectile;
-
-		PlaySound(SwitchAmmo);
-	
-		if(CurrentProjectile)
-			UE_LOG(LogTemp, Warning, TEXT("Red Ammo selected"));
-	}
-	
+	EquipAmmo(EAmmoType::Red);
 }
 
 void AJeremy::EquipAmmoSlot2()
 {
-	if(!bCharging && CurrentProjectile != GreenProjectile)
-	{
-		CurrentProjectile = GreenProjectile;
-
-		PlaySound(SwitchAmmo);
-	
-		if(CurrentProjectile)
-			UE_LOG(LogTemp, Warning, TEXT("Green Ammo selected"));
-	}
+	EquipAmmo(EAmmoType::Green);
 }
 
 void AJeremy::EquipAmmoSlot3()
 {
-	if(!bCharging && CurrentProjectile != BlueProjectile)
-	{
-		CurrentProjectile = BlueProjectile;
-
-		PlaySound(SwitchAmmo);
-	
-		if(CurrentProjectile)
-			UE_LOG(LogTemp, Warning, TEXT("Blue Ammo selected"));
-	}
+	EquipAmmo(EAmmoType::Blue);
 }
 
 void AJeremy::EquipAmmoSlot4()
 {
-	if(!bCharging && CurrentProjectile != YellowProjectile)
-	{
-		CurrentProjectile = YellowProjectile;
-	
-		PlaySound(SwitchAmmo);
-
-		if(CurrentProjectile)
-			UE_LOG(LogTemp, Warning, TEXT("Yellow Ammo selected"));
-	}
+	EquipAmmo(EAmmoType::Yellow);
 }
 
 void AJeremy::PlaySound(USoundBase* Sound)

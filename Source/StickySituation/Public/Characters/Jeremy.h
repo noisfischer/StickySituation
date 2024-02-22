@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Characters/PlayerCharacterBase.h"
+#include "GameEnums.h"
 #include "Jeremy.generated.h"
 
 /**
@@ -78,6 +79,7 @@ protected:
 	void FireSlingshot();
 	void SpawnProjectile(float Multiplier);
 
+	void EquipAmmo(EAmmoType AmmoType);
 	void EquipAmmoSlot1();
 	void EquipAmmoSlot2();
 	void EquipAmmoSlot3();
