@@ -1,10 +1,8 @@
 #include "Components/Grapple/GrappleComponent.h"
-
 #include "PropertyAccess.h"
 #include "Camera/CameraComponent.h"
 #include "Characters/PlayerCharacterBase.h"
 #include "Components/Grapple/GrappleHook.h"
-#include "Elements/Framework/TypedElementQueryBuilder.inl"
 #include "Kismet/GameplayStatics.h"
 
 UGrappleComponent::UGrappleComponent()
@@ -31,7 +29,7 @@ void UGrappleComponent::ActivateGrapple(FVector StartLocation, FRotator Rotation
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
-		AGrappleHook* GrappleHook = GetWorld()->SpawnActor<AGrappleHook>
+		ActiveGrappleHook = GetWorld()->SpawnActor<AGrappleHook>
 		(
 			GrappleHookBlueprint,
 			StartLocation,
@@ -39,10 +37,11 @@ void UGrappleComponent::ActivateGrapple(FVector StartLocation, FRotator Rotation
 			SpawnParams
 		);
 
-		if(GrappleHook)
+		if(ActiveGrappleHook)
 		{
-			GrappleHook->Initialize(StartLocation, EndLocation, GrappleSpeed);
-			GrappleHook->OnDestroyed.AddDynamic(this, &UGrappleComponent::OnGrappleHookDestroyed);
+			ActiveGrappleHook->Initialize(StartLocation, EndLocation, GrappleSpeed);
+			ActiveGrappleHook->GrappleMesh->OnComponentHit.AddDynamic(this, &UGrappleComponent::OnGrappleSuccess);
+			ActiveGrappleHook->OnDestroyed.AddDynamic(this, &UGrappleComponent::OnGrappleHookDestroyed);
 		}
 
 		else
@@ -50,9 +49,25 @@ void UGrappleComponent::ActivateGrapple(FVector StartLocation, FRotator Rotation
 	}
 }
 
+void UGrappleComponent::OnGrappleSuccess(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	// Launch Character
+}
+
 void UGrappleComponent::OnGrappleHookDestroyed(AActor* DestroyedGrappleHook)
 {
-	UE_LOG(LogTemp, Warning, TEXT("GrappleHook was destroyed"));
+	if(ActiveGrappleHook && ActiveGrappleHook->bGrappleSuccess)
+	{
+		ActiveGrappleHook->OnDestroyed.RemoveDynamic(this, &UGrappleComponent::OnGrappleHookDestroyed);
+		ActiveGrappleHook->GrappleMesh->OnComponentHit.RemoveDynamic(this, &UGrappleComponent::OnGrappleSuccess);
+		ActiveGrappleHook = nullptr;
+	}
+
+	else if (ActiveGrappleHook)
+	{
+		ActiveGrappleHook->GrappleMesh->OnComponentHit.RemoveDynamic(this, &UGrappleComponent::OnGrappleSuccess);
+		ActiveGrappleHook = nullptr;
+	}
 }
 
 

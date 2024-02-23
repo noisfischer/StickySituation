@@ -23,6 +23,8 @@ public:
 	FVector StartLocation;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Grapple")
 	FVector EndLocation;
+
+	bool bGrappleSuccess = false;
 	
 	UFUNCTION()
 	void Initialize(const FVector& NewStartLocation,
@@ -31,10 +33,15 @@ public:
 		);
 
 	UFUNCTION()
+	void PerformLineTrace();
+	
+	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 	
 protected:
 	virtual void BeginPlay() override;
+
+	const float TargetRadiusSquared = FMath::Square(100.f);
 
 public:	
 	virtual void Tick(float DeltaTime) override;

@@ -15,7 +15,9 @@ public:
 	UGrappleComponent();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Grapple")
-	TSubclassOf<AGrappleHook> GrappleHookBlueprint;
+	TSubclassOf<AGrappleHook> GrappleHookBlueprint = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Grapple")
+	AGrappleHook* ActiveGrappleHook = nullptr;
 
 	UFUNCTION()
 	virtual void ActivateGrapple(
@@ -26,8 +28,11 @@ public:
 		);
 
 	UFUNCTION()
-	void OnGrappleHookDestroyed(AActor* DestroyedGrappleHook);
+	void OnGrappleSuccess(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
+	UFUNCTION()
+	void OnGrappleHookDestroyed(AActor* DestroyedGrappleHook);
+	
 protected:
 	virtual void BeginPlay() override;
 
