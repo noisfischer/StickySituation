@@ -16,19 +16,31 @@ void UGrappleComponent::BeginPlay()
 }
 
 
-void UGrappleComponent::ActivateGrapple(FVector StartLocation, FRotator Rotation, FVector Direction)
+void UGrappleComponent::ActivateGrapple(FVector StartLocation, FRotator Rotation, FVector EndLocation, float GrappleSpeed)
 {
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	if(!GrappleHookBlueprint)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("FAILED TO FIRE GRAPPLE! Must set GrappleHook subclass!"));
+	}
 
-	AGrappleHook* GrappleHook = GetWorld()->SpawnActor<AGrappleHook>
-	(
-		AGrappleHook::StaticClass(),
-		StartLocation,
-		Rotation,
-		SpawnParams
-	);
-	
+	else
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+		AGrappleHook* GrappleHook = GetWorld()->SpawnActor<AGrappleHook>
+		(
+			GrappleHookBlueprint,
+			StartLocation,
+			Rotation,
+			SpawnParams
+		);
+
+		if(GrappleHook)
+			GrappleHook->Initialize(StartLocation, EndLocation, GrappleSpeed);
+		else
+			UE_LOG(LogTemp, Warning, TEXT("GrappleHook failed to spawn"));
+	}
 }
 
 

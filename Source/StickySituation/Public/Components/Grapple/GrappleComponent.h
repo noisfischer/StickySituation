@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GrappleHook.h"
 #include "Components/ActorComponent.h"
 #include "GrappleComponent.generated.h"
 
@@ -13,11 +14,15 @@ class STICKYSITUATION_API UGrappleComponent : public UActorComponent
 public:	
 	UGrappleComponent();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Grapple")
+	TSubclassOf<AGrappleHook> GrappleHookBlueprint;
+
 	UFUNCTION()
 	virtual void ActivateGrapple(
 		FVector StartLocation,
 		FRotator Rotation,
-		FVector Direction
+		FVector EndLocation,
+		float GrappleSpeed
 		);
 
 protected:

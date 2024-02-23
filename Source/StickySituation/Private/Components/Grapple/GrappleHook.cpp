@@ -1,27 +1,31 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Components/Grapple/GrappleHook.h"
 
-// Sets default values
 AGrappleHook::AGrappleHook()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	GrappleMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GrappleMesh"));
+	RootComponent = GrappleMesh;
+
+	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Movement"));
+	ProjectileMovementComponent->ProjectileGravityScale = 0;
 }
 
-// Called when the game starts or when spawned
 void AGrappleHook::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
-// Called every frame
+
 void AGrappleHook::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
+void AGrappleHook::Initialize(const FVector& NewStartLocation, const FVector& NewEndLocation, const float NewSpeed)
+{
+	StartLocation = NewStartLocation;
+	EndLocation = NewEndLocation;
+	ProjectileMovementComponent->MaxSpeed = NewSpeed;
+	ProjectileMovementComponent->InitialSpeed = NewSpeed;
+}

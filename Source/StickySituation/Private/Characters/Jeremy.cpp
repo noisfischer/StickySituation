@@ -214,16 +214,24 @@ void AJeremy::EquipAmmoSlot4()
 
 void AJeremy::Grapple()
 {
+
+	check(GrappleComponent);
+	
 	if(GrappleComponent)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Grapple"));
-		/*GrappleComponent->ActivateGrapple(
-			GetActorLocation(),
-			FollowCamera->GetComponentRotation(),
-			GetActorLocation()-
-			);*/
-	}
+		FVector StartLocation = GetActorLocation() + FVector(200, 200, 0);
+		FRotator Rotation = FollowCamera->GetComponentRotation();
 		
+		FVector CameraDirection = FollowCamera->GetForwardVector();
+		FVector EndLocation = StartLocation + (CameraDirection * GrappleRange);
+		
+		GrappleComponent->ActivateGrapple(StartLocation, Rotation, EndLocation, GrappleSpeed);
+	}
+
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GrappleComponent not attached"));
+	}
 }
 
 void AJeremy::PlaySound(USoundBase* Sound)
