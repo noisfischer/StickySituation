@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Characters/PlayerCharacterBase.h"
+#include "Components/Grapple/GrappleComponent.h"
 #include "GameEnums.h"
 #include "Jeremy.generated.h"
 
@@ -45,9 +46,8 @@ public:
 	TSubclassOf<AProjectileBase> CurrentProjectile;
 
 
-	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UGrappleComponent* GrappleComponent;
-	*/
 
 	
 	// SFX - assign in child BP //
