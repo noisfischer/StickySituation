@@ -5,8 +5,6 @@
 #include "GrappleComponent.generated.h"
 
 
-class APlayerCharacterBase;
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class STICKYSITUATION_API UGrappleComponent : public UActorComponent
 {
@@ -15,11 +13,15 @@ class STICKYSITUATION_API UGrappleComponent : public UActorComponent
 public:	
 	UGrappleComponent();
 
+	UFUNCTION()
+	virtual void ActivateGrapple(
+		FVector StartLocation,
+		FRotator Rotation,
+		FVector Direction
+		);
+
 protected:
 	virtual void BeginPlay() override;
-
-	UPROPERTY()
-	APlayerCharacterBase* PlayerRef;
 
 public:
 	/*

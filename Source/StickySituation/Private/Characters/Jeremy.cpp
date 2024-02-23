@@ -215,7 +215,15 @@ void AJeremy::EquipAmmoSlot4()
 void AJeremy::Grapple()
 {
 	if(GrappleComponent)
+	{
 		UE_LOG(LogTemp, Warning, TEXT("Grapple"));
+		/*GrappleComponent->ActivateGrapple(
+			GetActorLocation(),
+			FollowCamera->GetComponentRotation(),
+			GetActorLocation()-
+			);*/
+	}
+		
 }
 
 void AJeremy::PlaySound(USoundBase* Sound)
