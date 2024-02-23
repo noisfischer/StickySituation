@@ -29,6 +29,9 @@ public:
 		const FVector& NewEndLocation,
 		const float NewSpeed
 		);
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 	
 protected:
 	virtual void BeginPlay() override;

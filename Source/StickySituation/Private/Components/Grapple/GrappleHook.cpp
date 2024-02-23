@@ -14,6 +14,8 @@ AGrappleHook::AGrappleHook()
 void AGrappleHook::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GrappleMesh->OnComponentHit.AddDynamic(this, &AGrappleHook::OnHit);
 }
 
 
@@ -28,4 +30,10 @@ void AGrappleHook::Initialize(const FVector& NewStartLocation, const FVector& Ne
 	EndLocation = NewEndLocation;
 	ProjectileMovementComponent->MaxSpeed = NewSpeed;
 	ProjectileMovementComponent->InitialSpeed = NewSpeed;
+}
+
+void AGrappleHook::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	FVector NormalImpulse, const FHitResult& Hit)
+{
+	this->Destroy();
 }

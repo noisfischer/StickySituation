@@ -25,6 +25,9 @@ public:
 		float GrappleSpeed
 		);
 
+	UFUNCTION()
+	void OnGrappleHookDestroyed(AActor* DestroyedGrappleHook);
+
 protected:
 	virtual void BeginPlay() override;
 

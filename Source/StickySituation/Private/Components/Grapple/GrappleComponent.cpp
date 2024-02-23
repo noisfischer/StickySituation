@@ -1,7 +1,10 @@
 #include "Components/Grapple/GrappleComponent.h"
+
+#include "PropertyAccess.h"
 #include "Camera/CameraComponent.h"
 #include "Characters/PlayerCharacterBase.h"
 #include "Components/Grapple/GrappleHook.h"
+#include "Elements/Framework/TypedElementQueryBuilder.inl"
 #include "Kismet/GameplayStatics.h"
 
 UGrappleComponent::UGrappleComponent()
@@ -37,14 +40,20 @@ void UGrappleComponent::ActivateGrapple(FVector StartLocation, FRotator Rotation
 		);
 
 		if(GrappleHook)
+		{
 			GrappleHook->Initialize(StartLocation, EndLocation, GrappleSpeed);
+			GrappleHook->OnDestroyed.AddDynamic(this, &UGrappleComponent::OnGrappleHookDestroyed);
+		}
+
 		else
 			UE_LOG(LogTemp, Warning, TEXT("GrappleHook failed to spawn"));
 	}
 }
 
-
-
+void UGrappleComponent::OnGrappleHookDestroyed(AActor* DestroyedGrappleHook)
+{
+	UE_LOG(LogTemp, Warning, TEXT("GrappleHook was destroyed"));
+}
 
 
 /*
