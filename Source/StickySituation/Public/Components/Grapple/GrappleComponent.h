@@ -18,13 +18,18 @@ public:
 	TSubclassOf<AGrappleHook> GrappleHookBlueprint = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Grapple")
 	AGrappleHook* ActiveGrappleHook = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grapple")
+	float GrappleRange = 2000.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grapple")
+	float GrappleSpeed = 5000.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grapple")
+	float GrappleLaunchPower = 2500.f;
 
 	UFUNCTION()
 	virtual void ActivateGrapple(
 		FVector StartLocation,
 		FRotator Rotation,
-		FVector EndLocation,
-		float GrappleSpeed
+		FVector EndLocation
 		);
 
 	UFUNCTION()

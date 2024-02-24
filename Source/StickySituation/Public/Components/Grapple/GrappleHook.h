@@ -20,11 +20,13 @@ public:
 	UProjectileMovementComponent* ProjectileMovementComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Grapple")
-	FVector StartLocation;
+	FVector StartLocation {};
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Grapple")
-	FVector EndLocation;
+	FVector EndLocation {};
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Grapple")
-	FVector Direction;
+	FVector HitLocation {};
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Grapple")
+	FVector Direction {};
 
 	bool bGrappleSuccess = false;
 	
@@ -36,12 +38,9 @@ public:
 
 	UFUNCTION()
 	void PerformLineTrace();
-	
-	UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
-	
+
 protected:
-	virtual void BeginPlay() override;
+	//virtual void BeginPlay() override;
 
 	const float TargetRadiusSquared = FMath::Square(100.f);
 

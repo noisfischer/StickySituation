@@ -17,14 +17,14 @@ void UGrappleComponent::BeginPlay()
 }
 
 
-void UGrappleComponent::ActivateGrapple(FVector StartLocation, FRotator Rotation, FVector EndLocation, float GrappleSpeed)
+void UGrappleComponent::ActivateGrapple(FVector StartLocation, FRotator Rotation, FVector EndLocation)
 {
 	if(!GrappleHookBlueprint)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("FAILED TO FIRE GRAPPLE! Must set GrappleHook subclass!"));
 	}
 
-	else
+	else if (ActiveGrappleHook == nullptr)
 	{
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
@@ -51,23 +51,21 @@ void UGrappleComponent::ActivateGrapple(FVector StartLocation, FRotator Rotation
 
 void UGrappleComponent::OnGrappleSuccess(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	FVector GrappleDirection = ActiveGrappleHook->Direction;
-	ACharacter* PlayerRef = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-	PlayerRef->LaunchCharacter(FVector (0, 0, 1000), true, true);
-	// Launch Character
+	if(ActiveGrappleHook)
+	{
+		ACharacter* PlayerRef = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+		FVector Direction = (ActiveGrappleHook->HitLocation - PlayerRef->GetActorLocation()).GetSafeNormal();
+		FVector Velocity = Direction * GrappleLaunchPower;
+		PlayerRef->LaunchCharacter(Velocity, true, true);
+		ActiveGrappleHook->Destroy();
+	}
 }
 
 void UGrappleComponent::OnGrappleHookDestroyed(AActor* DestroyedGrappleHook)
 {
-	if(ActiveGrappleHook && ActiveGrappleHook->bGrappleSuccess)
+	if(ActiveGrappleHook)
 	{
 		ActiveGrappleHook->OnDestroyed.RemoveDynamic(this, &UGrappleComponent::OnGrappleHookDestroyed);
-		ActiveGrappleHook->GrappleMesh->OnComponentHit.RemoveDynamic(this, &UGrappleComponent::OnGrappleSuccess);
-		ActiveGrappleHook = nullptr;
-	}
-
-	else if (ActiveGrappleHook)
-	{
 		ActiveGrappleHook->GrappleMesh->OnComponentHit.RemoveDynamic(this, &UGrappleComponent::OnGrappleSuccess);
 		ActiveGrappleHook = nullptr;
 	}

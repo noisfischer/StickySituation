@@ -16,7 +16,7 @@ void AGrappleHook::Initialize(const FVector& NewStartLocation, const FVector& Ne
 {
 	StartLocation = NewStartLocation;
 	EndLocation = NewEndLocation;
-    Direction = (EndLocation - StartLocation).GetSafeNormal(); // Correctly obtain normalized direction
+    Direction = (EndLocation - StartLocation).GetSafeNormal();
 	ProjectileMovementComponent->Velocity = Direction * NewSpeed;
 
 	PerformLineTrace();
@@ -36,6 +36,9 @@ void AGrappleHook::PerformLineTrace()
 		CollisionParams
 		);
 
+	if(bHit)
+		HitLocation = HitResult.Location;
+	
 	DrawDebugLine(
 		GetWorld(),
 		StartLocation,
@@ -48,12 +51,12 @@ void AGrappleHook::PerformLineTrace()
 		);
 }
 
+/*
 void AGrappleHook::BeginPlay()
 {
 	Super::BeginPlay();
-
-	GrappleMesh->OnComponentHit.AddDynamic(this, &AGrappleHook::OnHit);
 }
+*/
 
 
 void AGrappleHook::Tick(float DeltaTime)
@@ -62,12 +65,4 @@ void AGrappleHook::Tick(float DeltaTime)
 
 	if(FVector::DistSquared(GetActorLocation(), EndLocation) <= TargetRadiusSquared)
 		Destroy();
-}
-
-
-void AGrappleHook::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	FVector NormalImpulse, const FHitResult& Hit)
-{
-	bGrappleSuccess = true;
-	this->Destroy();
 }

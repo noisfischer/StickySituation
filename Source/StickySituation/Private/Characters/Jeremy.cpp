@@ -223,9 +223,9 @@ void AJeremy::Grapple()
 		FRotator Rotation = FollowCamera->GetComponentRotation();
 		
 		FVector CameraDirection = FollowCamera->GetForwardVector();
-		FVector EndLocation = StartLocation + (CameraDirection * GrappleRange);
+		FVector EndLocation = StartLocation + (CameraDirection * GrappleComponent->GrappleRange);
 		
-		GrappleComponent->ActivateGrapple(StartLocation, Rotation, EndLocation, GrappleSpeed);
+		GrappleComponent->ActivateGrapple(StartLocation, Rotation, EndLocation);
 	}
 
 	else

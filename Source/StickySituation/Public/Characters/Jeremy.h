@@ -48,10 +48,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Grapple")
 	UGrappleComponent* GrappleComponent;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grapple")
-	float GrappleRange = 1000.f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grapple")
-	float GrappleSpeed = 5000.f;
 
 	
 	// SFX - assign in child BP //
