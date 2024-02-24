@@ -51,6 +51,9 @@ void UGrappleComponent::ActivateGrapple(FVector StartLocation, FRotator Rotation
 
 void UGrappleComponent::OnGrappleSuccess(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+	FVector GrappleDirection = ActiveGrappleHook->Direction;
+	ACharacter* PlayerRef = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	PlayerRef->LaunchCharacter(FVector (0, 0, 1000), true, true);
 	// Launch Character
 }
 

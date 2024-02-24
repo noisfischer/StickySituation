@@ -16,7 +16,7 @@ void AGrappleHook::Initialize(const FVector& NewStartLocation, const FVector& Ne
 {
 	StartLocation = NewStartLocation;
 	EndLocation = NewEndLocation;
-    FVector Direction = (EndLocation - StartLocation).GetSafeNormal(); // Correctly obtain normalized direction
+    Direction = (EndLocation - StartLocation).GetSafeNormal(); // Correctly obtain normalized direction
 	ProjectileMovementComponent->Velocity = Direction * NewSpeed;
 
 	PerformLineTrace();

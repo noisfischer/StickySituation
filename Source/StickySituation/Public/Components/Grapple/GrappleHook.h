@@ -23,6 +23,8 @@ public:
 	FVector StartLocation;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Grapple")
 	FVector EndLocation;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Grapple")
+	FVector Direction;
 
 	bool bGrappleSuccess = false;
 	
