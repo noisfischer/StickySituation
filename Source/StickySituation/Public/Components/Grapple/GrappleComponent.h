@@ -23,7 +23,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grapple")
 	float GrappleSpeed = 5000.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grapple")
-	float GrappleLaunchPower = 2500.f;
+	float GrappleLaunchPower = 5000.f;
 
 	UFUNCTION()
 	virtual void ActivateGrapple(

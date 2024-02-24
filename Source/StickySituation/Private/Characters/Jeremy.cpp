@@ -219,7 +219,7 @@ void AJeremy::Grapple()
 	
 	if(GrappleComponent)
 	{
-		FVector StartLocation = GetActorLocation() + FVector(200, 200, 0);
+		FVector StartLocation = GetMesh()->GetBoneLocation("Head") + (FollowCamera->GetForwardVector() * 250);
 		FRotator Rotation = FollowCamera->GetComponentRotation();
 		
 		FVector CameraDirection = FollowCamera->GetForwardVector();

@@ -55,7 +55,7 @@ void UGrappleComponent::OnGrappleSuccess(UPrimitiveComponent* HitComponent, AAct
 	{
 		ACharacter* PlayerRef = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 		FVector Direction = (ActiveGrappleHook->HitLocation - PlayerRef->GetActorLocation()).GetSafeNormal();
-		FVector Velocity = Direction * GrappleLaunchPower;
+		FVector Velocity = Direction * (GrappleLaunchPower * ActiveGrappleHook->LaunchMultiplier);
 		PlayerRef->LaunchCharacter(Velocity, true, true);
 		ActiveGrappleHook->Destroy();
 	}

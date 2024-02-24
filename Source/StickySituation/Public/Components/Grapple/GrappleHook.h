@@ -27,6 +27,8 @@ public:
 	FVector HitLocation {};
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Grapple")
 	FVector Direction {};
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Grapple")
+	float LaunchMultiplier {};
 
 	bool bGrappleSuccess = false;
 	

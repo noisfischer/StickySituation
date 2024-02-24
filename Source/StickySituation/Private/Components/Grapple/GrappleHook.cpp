@@ -37,7 +37,14 @@ void AGrappleHook::PerformLineTrace()
 		);
 
 	if(bHit)
+	{
 		HitLocation = HitResult.Location;
+		float DistanceToHit = FVector::Dist(StartLocation, HitLocation);
+		float TotalDistance = FVector::Dist(StartLocation, EndLocation);
+		if(TotalDistance > 0)
+			LaunchMultiplier = FMath::Clamp(DistanceToHit/TotalDistance, .35, 1);
+	}
+		
 	
 	DrawDebugLine(
 		GetWorld(),
