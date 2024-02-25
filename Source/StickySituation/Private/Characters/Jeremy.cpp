@@ -40,13 +40,6 @@ void AJeremy::BeginPlay()
 		CurrentProjectile = RedProjectile;
 }
 
-
-void AJeremy::Melee()
-{
-	bAttacking = true;
-	PlayAnimMontage(MeleeMontage, MeleeSpeed, FName("None"));
-}
-
 void AJeremy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// ENABLES MOVE, LOOK, JUMP FROM PARENT CLASS //
@@ -69,6 +62,22 @@ void AJeremy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 		EnhancedInputComponent->BindAction(MeleeAction, ETriggerEvent::Triggered, this, &AJeremy::Melee);
 
 	}
+}
+
+void AJeremy::Melee()
+{
+	bAttacking = true;
+	PlayAnimMontage(MeleeMontage, MeleeSpeed, FName("None"));
+}
+
+void AJeremy::OnWeaponCollisionOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	Super::OnWeaponCollisionOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep,
+	                                SweepResult);
+
+	if(OtherActor->ActorHasTag("enemy"))
+		UE_LOG(LogTemp, Warning, TEXT("OVERLAP"));
 }
 
 void AJeremy::StartSlingshotPull()

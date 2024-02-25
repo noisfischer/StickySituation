@@ -61,6 +61,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Animation")
 	UAnimInstance* AnimInstance = nullptr;
 
+	virtual void ActivateMelee();
+	virtual void DeactivateMelee();
+
 	// HEALTH ATTRIBUTES //
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="1 - HEALTH")
 	float MaxHealth = 100;
@@ -106,12 +109,10 @@ public:
 
 	virtual void HealPlayer_Implementation(float Heal) override;
 
-
-	
-protected:
-
-	virtual float PlayAnimMontage(UAnimMontage* AnimMontage, float InPlayRate, FName StartSectionName) override;
+	UFUNCTION()
 	virtual void OnMontageFinished(UAnimMontage* Montage, bool bMontageInterrupted);
+
+	UFUNCTION()
 	virtual void OnWeaponCollisionOverlap
 		(
 		UPrimitiveComponent* OverlappedComponent,
@@ -121,8 +122,9 @@ protected:
 		bool bFromSweep,
 		const FHitResult& SweepResult
 		);
-	virtual void ActivateMelee();
-	virtual void DeactivateMelee();
+	
+protected:
+	virtual float PlayAnimMontage(UAnimMontage* AnimMontage, float InPlayRate, FName StartSectionName) override;
 
 	bool bAttacking = false;
 
