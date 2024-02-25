@@ -38,6 +38,8 @@ void AJeremy::BeginPlay()
 		CurrentProjectile = StartProjectile;
 	else
 		CurrentProjectile = RedProjectile;
+
+	check(GrappleComponent);
 }
 
 void AJeremy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

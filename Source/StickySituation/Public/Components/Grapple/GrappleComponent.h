@@ -16,7 +16,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Grapple")
 	TSubclassOf<AGrappleHook> GrappleHookBlueprint = nullptr;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Grapple")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Grapple")
 	AGrappleHook* ActiveGrappleHook = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grapple")
 	float GrappleRange = 2000.f;

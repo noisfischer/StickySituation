@@ -111,7 +111,7 @@ public:
 
 	UFUNCTION()
 	virtual void OnMontageFinished(UAnimMontage* Montage, bool bMontageInterrupted);
-
+	
 	UFUNCTION()
 	virtual void OnWeaponCollisionOverlap
 		(

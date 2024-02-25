@@ -39,13 +39,18 @@ void UGrappleComponent::ActivateGrapple(FVector StartLocation, FRotator Rotation
 
 		if(ActiveGrappleHook)
 		{
-			ActiveGrappleHook->Initialize(StartLocation, EndLocation, GrappleSpeed);
+			bool const bInitSuccess = ActiveGrappleHook->Initialize(StartLocation, EndLocation, GrappleSpeed);
+			ensure(bInitSuccess);
+			
 			ActiveGrappleHook->GrappleMesh->OnComponentHit.AddDynamic(this, &UGrappleComponent::OnGrappleSuccess);
 			ActiveGrappleHook->OnDestroyed.AddDynamic(this, &UGrappleComponent::OnGrappleHookDestroyed);
 		}
 
 		else
+		{
 			UE_LOG(LogTemp, Warning, TEXT("GrappleHook failed to spawn"));
+		}
+			
 	}
 }
 

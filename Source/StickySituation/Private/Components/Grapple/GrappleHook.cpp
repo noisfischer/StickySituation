@@ -12,7 +12,7 @@ AGrappleHook::AGrappleHook()
 }
 
 
-void AGrappleHook::Initialize(const FVector& NewStartLocation, const FVector& NewEndLocation, const float NewSpeed)
+bool AGrappleHook::Initialize(const FVector& NewStartLocation, const FVector& NewEndLocation, const float NewSpeed)
 {
 	StartLocation = NewStartLocation;
 	EndLocation = NewEndLocation;
@@ -20,6 +20,8 @@ void AGrappleHook::Initialize(const FVector& NewStartLocation, const FVector& Ne
 	ProjectileMovementComponent->Velocity = Direction * NewSpeed;
 
 	PerformLineTrace();
+
+	return true;
 }
 
 void AGrappleHook::PerformLineTrace()

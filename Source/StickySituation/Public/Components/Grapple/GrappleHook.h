@@ -33,7 +33,7 @@ public:
 	bool bGrappleSuccess = false;
 	
 	UFUNCTION()
-	void Initialize(const FVector& NewStartLocation,
+	bool Initialize(const FVector& NewStartLocation,
 		const FVector& NewEndLocation,
 		const float NewSpeed
 		);
