@@ -6,6 +6,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "Projectiles/ProjectileBase.h"
 #include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Projectiles/RedProjectile.h"
 #include "Projectiles/GreenProjectile.h"
@@ -37,9 +38,14 @@ void AJeremy::BeginPlay()
 		CurrentProjectile = StartProjectile;
 	else
 		CurrentProjectile = RedProjectile;
-		
 }
 
+
+void AJeremy::Melee()
+{
+	bAttacking = true;
+	PlayAnimMontage(MeleeMontage, MeleeSpeed, FName("None"));
+}
 
 void AJeremy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -59,6 +65,8 @@ void AJeremy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 		EnhancedInputComponent->BindAction(AmmoSlotAction_4, ETriggerEvent::Triggered, this, &AJeremy::EquipAmmoSlot4);
 
 		EnhancedInputComponent->BindAction(GrappleAction, ETriggerEvent::Triggered, this, &AJeremy::Grapple);
+
+		EnhancedInputComponent->BindAction(MeleeAction, ETriggerEvent::Triggered, this, &AJeremy::Melee);
 
 	}
 }
@@ -87,6 +95,7 @@ void AJeremy::ChargeSlingshot()
 		{
 			bChargeFull = true;
 			PlaySound(SlingshotFullCharge);
+			
 			// Spawn Sparkle VFX on slingshot mesh
 		}
 	}
@@ -95,6 +104,9 @@ void AJeremy::ChargeSlingshot()
 void AJeremy::FireSlingshot()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Slingshot Fired"));
+
+	if (ChargeValue < .15)
+		ChargeValue = .15;
 	
 	SpawnProjectile(ChargeValue);	// ChargeValue USED AS DAMAGE/SPEED MULTIPLIER  //
 	PlaySound(SlingshotFired);
@@ -110,7 +122,7 @@ void AJeremy::FireSlingshot()
 
 void AJeremy::SpawnProjectile(float Multiplier)
 {
-	FVector SpawnLocation = GetActorLocation() + FVector(100, 100, 0);
+	FVector SpawnLocation = GetMesh()->GetBoneLocation("Head") + (FollowCamera->GetForwardVector() * 250);
 	FRotator SpawnRotation = FollowCamera->GetComponentRotation();
 
 	FActorSpawnParameters SpawnParams;
@@ -148,9 +160,6 @@ void AJeremy::SpawnProjectile(float Multiplier)
 		UE_LOG(LogTemp, Warning, TEXT("Normal Speed & Damage"));
 	}
 }
-
-
-
 
 void AJeremy::EquipAmmo(EAmmoType AmmoType)
 {

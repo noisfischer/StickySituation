@@ -22,9 +22,9 @@ AProjectileBase::AProjectileBase()
 	// SETUP PROJECTILE COMPONENT W/NO SPEED NOR GRAVITY
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 	ProjectileMovementComponent->SetUpdatedComponent(RootComponent);
-	ProjectileMovementComponent->MaxSpeed = 1000.f;
+	ProjectileMovementComponent->MaxSpeed = 5000.f;
 	ProjectileMovementComponent->InitialSpeed = ProjectileMovementComponent->MaxSpeed;
-	ProjectileMovementComponent->ProjectileGravityScale = 0.f;
+	ProjectileMovementComponent->ProjectileGravityScale = 1.f;
 	ProjectileMovementComponent->bRotationFollowsVelocity = true;
 	ProjectileMovementComponent->bShouldBounce = false;
 	ProjectileMovementComponent->bIsHomingProjectile = false;

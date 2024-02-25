@@ -57,7 +57,9 @@ public:
 	USkeletalMeshComponent* MeleeWeapon_Mesh;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Mesh)
 	UCapsuleComponent* MeleeWeapon_Collision;
-	
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Animation")
+	UAnimInstance* AnimInstance = nullptr;
 
 	// HEALTH ATTRIBUTES //
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="1 - HEALTH")
@@ -107,6 +109,22 @@ public:
 
 	
 protected:
+
+	virtual float PlayAnimMontage(UAnimMontage* AnimMontage, float InPlayRate, FName StartSectionName) override;
+	virtual void OnMontageFinished(UAnimMontage* Montage, bool bMontageInterrupted);
+	virtual void OnWeaponCollisionOverlap
+		(
+		UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult
+		);
+	virtual void ActivateMelee();
+	virtual void DeactivateMelee();
+
+	bool bAttacking = false;
 
 	// ENHANCED INPUT FUNCTION BINDINGS
 	void Move(const FInputActionValue& Value);

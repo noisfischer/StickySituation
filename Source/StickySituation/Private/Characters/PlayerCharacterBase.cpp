@@ -83,6 +83,12 @@ void APlayerCharacterBase::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+
+	// MELEE ANIMATION SETUP //
+	MeleeWeapon_Collision->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacterBase::OnWeaponCollisionOverlap);
+	AnimInstance = GetMesh()->GetAnimInstance();
+	if(AnimInstance != nullptr)
+		AnimInstance->OnMontageEnded.AddDynamic(this, &APlayerCharacterBase::OnMontageFinished);
 }
 
 
@@ -159,4 +165,37 @@ void APlayerCharacterBase::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+
+
+// ANIMATION SETUP //
+float APlayerCharacterBase::PlayAnimMontage(UAnimMontage* AnimMontage, float InPlayRate, FName StartSectionName)
+{
+	float MontageLength = 0.f;
+	if(AnimMontage && AnimInstance)
+	{
+		MontageLength = AnimInstance->Montage_Play(AnimMontage, InPlayRate);
+	}
+	return MontageLength;
+}
+
+void APlayerCharacterBase::OnMontageFinished(UAnimMontage* Montage, bool bMontageInterrupted)
+{
+	bAttacking = false;
+}
+
+void APlayerCharacterBase::OnWeaponCollisionOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+}
+
+void APlayerCharacterBase::ActivateMelee()
+{
+	MeleeWeapon_Collision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+}
+
+void APlayerCharacterBase::DeactivateMelee()
+{
+	MeleeWeapon_Collision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }

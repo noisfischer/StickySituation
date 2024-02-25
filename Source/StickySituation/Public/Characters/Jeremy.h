@@ -37,7 +37,13 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* GrappleAction = nullptr;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* MeleeAction = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UAnimMontage* MeleeMontage = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	float MeleeSpeed = 1.f;
 	
 	// USED TO SET THE CURRENT AMMO TYPE //
 	UPROPERTY(EditDefaultsOnly, Category = "2 - AMMO")
@@ -71,8 +77,7 @@ protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	virtual void BeginPlay() override;
-
-
+	
 	// SLINGSHOT ATTRIBUTES //
 	float ChargeValue = 0;
 	bool bChargeFull = false;
@@ -90,6 +95,8 @@ protected:
 	void EquipAmmoSlot4();
 
 	void Grapple();
+
+	void Melee();
 	
 	void PlaySound(USoundBase* Sound);
 	
