@@ -40,10 +40,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* MeleeAction = nullptr;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
 	UAnimMontage* MeleeMontage = nullptr;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Melee")
 	float MeleeSpeed = 1.f;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Melee")
+	float MeleeDamage = 1.f;
 	
 	// USED TO SET THE CURRENT AMMO TYPE //
 	UPROPERTY(EditDefaultsOnly, Category = "2 - AMMO")

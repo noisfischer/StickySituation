@@ -192,12 +192,10 @@ void APlayerCharacterBase::OnWeaponCollisionOverlap(UPrimitiveComponent* Overlap
 
 void APlayerCharacterBase::ActivateMelee()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Active"))
 	MeleeWeapon_Collision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 }
 
 void APlayerCharacterBase::DeactivateMelee()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Deactive"))
 	MeleeWeapon_Collision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
