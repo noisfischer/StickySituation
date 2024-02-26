@@ -39,7 +39,9 @@ void AJeremy::BeginPlay()
 	else
 		CurrentProjectile = RedProjectile;
 
-	check(GrappleComponent);
+	ensure(GrappleComponent);
+	ensure(!ProjectileMap.Num() == 0);
+	ensure(!AmmoCountMap.Num() == 0);
 }
 
 void AJeremy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -90,11 +92,11 @@ void AJeremy::OnWeaponCollisionOverlap(UPrimitiveComponent* OverlappedComponent,
 
 void AJeremy::StartSlingshotPull()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Slingshot Charge Begin"));
+		UE_LOG(LogTemp, Warning, TEXT("Slingshot Charge Begin"));
 
-	bCharging = true;
+		bCharging = true;
 
-	PlaySound(SlingshotPull);
+		PlaySound(SlingshotPull);
 }
 
 void AJeremy::ChargeSlingshot()
@@ -260,18 +262,3 @@ void AJeremy::Grapple()
 	}
 }
 
-void AJeremy::PlaySound(USoundBase* Sound)
-{
-	if(Sound != nullptr)
-		UGameplayStatics::PlaySound2D
-			(
-			GetWorld(),
-			Sound,
-			1,
-			1,
-			0,
-			nullptr,
-			this,
-			false
-			);
-}

@@ -10,6 +10,12 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "SPinValueInspector.h"
+#include "Kismet/GameplayStatics.h"
+#include "Projectiles/RedProjectile.h"
+#include "Projectiles/GreenProjectile.h"
+#include "Projectiles/BlueProjectile.h"
+#include "Projectiles/YellowProjectile.h"
 
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -67,7 +73,6 @@ APlayerCharacterBase::APlayerCharacterBase()
 	MeleeWeapon_Collision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("MeleeWeaponCollision"));
 	MeleeWeapon_Collision->SetupAttachment(MeleeWeapon_Mesh);
 	MeleeWeapon_Collision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	
 }
 
 void APlayerCharacterBase::BeginPlay()
@@ -180,6 +185,7 @@ float APlayerCharacterBase::PlayAnimMontage(UAnimMontage* AnimMontage, float InP
 	return MontageLength;
 }
 
+
 void APlayerCharacterBase::OnMontageFinished(UAnimMontage* Montage, bool bMontageInterrupted)
 {
 	bAttacking = false;
@@ -198,4 +204,20 @@ void APlayerCharacterBase::ActivateMelee()
 void APlayerCharacterBase::DeactivateMelee()
 {
 	MeleeWeapon_Collision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
+void APlayerCharacterBase::PlaySound(USoundBase* Sound)
+{
+	if(Sound != nullptr)
+		UGameplayStatics::PlaySound2D
+			(
+			GetWorld(),
+			Sound,
+			1,
+			1,
+			0,
+			nullptr,
+			this,
+			false
+			);
 }

@@ -5,10 +5,10 @@
 UENUM(BlueprintType)
 enum class EAmmoType : uint8
 {
-	Red,
-	Green,
-	Blue,
-	Yellow
+	Red  UMETA(DisplayName = "Red"),
+	Green  UMETA(DisplayName = "Green"),
+	Blue  UMETA(DisplayName = "Blue"),
+	Yellow  UMETA(DisplayName = "Yellow"),
 };
 
 

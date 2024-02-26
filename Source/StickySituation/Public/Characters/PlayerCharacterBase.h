@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameEnums.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "Interfaces/CharacterInterface.h"
@@ -72,7 +73,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="1 - HEALTH")
 	bool Dead = false;
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
+	TMap<EAmmoType, TSubclassOf<AProjectileBase>> ProjectileMap;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
+	TMap<EAmmoType, int32> AmmoCountMap;
 
 	// ASSIGN THESE IN THE PLAYER CHILD BP //
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
@@ -93,6 +97,13 @@ public:
 	int32 BlueAmmo = 1;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="2 - AMMO")
 	int32 YellowAmmo = 1;
+
+
+	// USED TO SET THE CURRENT AMMO TYPE //
+	UPROPERTY(EditDefaultsOnly, Category = "2 - AMMO")
+	TSubclassOf<AProjectileBase> StartProjectile;
+	UPROPERTY(EditDefaultsOnly, Category = "2 - AMMO")
+	TSubclassOf<AProjectileBase> CurrentProjectile;
 	
 
 	// SOCKET NAMES FOR ATTACHMENT TO SKELETAL MESH //
@@ -122,10 +133,13 @@ public:
 		bool bFromSweep,
 		const FHitResult& SweepResult
 		);
+
+	UFUNCTION(BlueprintCallable)
+	virtual void PlaySound(USoundBase* Sound);
 	
 protected:
 	virtual float PlayAnimMontage(UAnimMontage* AnimMontage, float InPlayRate, FName StartSectionName) override;
-
+	
 	bool bAttacking = false;
 
 	// ENHANCED INPUT FUNCTION BINDINGS
