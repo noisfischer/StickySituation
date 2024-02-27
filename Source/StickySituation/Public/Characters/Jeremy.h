@@ -80,9 +80,9 @@ protected:
 	void StartSlingshotPull();
 	void ChargeSlingshot();
 	void FireSlingshot();
-	void SpawnProjectile(float Multiplier);
 
-	void EquipAmmo(EAmmoType AmmoType);
+	void InitializeAmmo();
+	
 	void EquipAmmoSlot1();
 	void EquipAmmoSlot2();
 	void EquipAmmoSlot3();

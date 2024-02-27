@@ -4,6 +4,7 @@
 #include "Characters/Jeremy.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "GameMacros.h"
 #include "Projectiles/ProjectileBase.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -33,20 +34,11 @@ void AJeremy::BeginPlay()
 		}
 	}
 
-	// IF START PROJECTILE NOT SELECTED IN CHILD BP //
-	if(StartProjectile != nullptr)
-		CurrentProjectile = StartProjectile;
-	else
-	{
-		TSubclassOf<AProjectileBase>* TemporaryProjectile = ProjectileMap.Find(EAmmoType::Red);
-		if(TemporaryProjectile)
-			CurrentProjectile = *TemporaryProjectile;
-		//CurrentProjectile = RedProjectile;
-	}
-	
 	ensure(GrappleComponent);
 	ensure(!ProjectileMap.Num() == 0);
 	ensure(!AmmoCountMap.Num() == 0);
+
+	InitializeAmmo();
 }
 
 void AJeremy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -73,6 +65,16 @@ void AJeremy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	}
 }
 
+void AJeremy::InitializeAmmo()
+{
+	EQUIP_AMMO_TYPE(CurrentAmmoType);	// from GameMacros.h
+
+	AmmoCountMap.Add(EAmmoType::Red, 1);
+	AmmoCountMap.Add(EAmmoType::Green, 1);
+	AmmoCountMap.Add(EAmmoType::Blue, 1);
+	AmmoCountMap.Add(EAmmoType::Yellow, 1);
+}
+
 void AJeremy::Melee()
 {
 	if (!bAttacking)
@@ -95,18 +97,20 @@ void AJeremy::OnWeaponCollisionOverlap(UPrimitiveComponent* OverlappedComponent,
 		
 }
 
+
 void AJeremy::StartSlingshotPull()
 {
-		UE_LOG(LogTemp, Warning, TEXT("Slingshot Charge Begin"));
-
+	if(*AmmoCountMap.Find(CurrentAmmoType) != 0)
+	{
 		bCharging = true;
-
 		PlaySound(SlingshotPull);
+	}
+	
 }
 
 void AJeremy::ChargeSlingshot()
 {
-	if (ChargeValue < 1)
+	if (bCharging && ChargeValue < 1)
 	{
 		ChargeValue += 1 * GetWorld()->GetDeltaSeconds();	// CHARGE EVERY TICK //
 		ChargeValue = FMath::Clamp(ChargeValue, 0, 1);
@@ -127,121 +131,62 @@ void AJeremy::ChargeSlingshot()
 
 void AJeremy::FireSlingshot()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Slingshot Fired"));
-
-	if (ChargeValue < .15)
-		ChargeValue = .15;
-	
-	SpawnProjectile(ChargeValue);	// ChargeValue USED AS DAMAGE/SPEED MULTIPLIER  //
-	PlaySound(SlingshotFired);
-
-	// RESET CHARGE VALUES //
-	ChargeValue = 0;	
-	if(bChargeFull)
-		bChargeFull = false;
-
-	bCharging = false;
-	
-}
-
-void AJeremy::SpawnProjectile(float Multiplier)
-{
-	FVector SpawnLocation = GetMesh()->GetBoneLocation("Head") + (FollowCamera->GetForwardVector() * 250);
-	FRotator SpawnRotation = FollowCamera->GetComponentRotation();
-
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.Owner = this;
-	SpawnParams.Instigator = GetInstigator();
-
-	AProjectileBase* Projectile = GetWorld()->SpawnActor<AProjectileBase>
-		(
-		CurrentProjectile,
-		SpawnLocation,
-		SpawnRotation,
-		SpawnParams
-		);
-
-	Projectile->SetCurrentSpeed(Multiplier);
-	Projectile->SetBaseDamage(Multiplier);
-	
-	if(Multiplier < 0.25)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Very Low Speed & Damage"));
-	}
-
-	else if(Multiplier < 0.5)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Low Speed & Damage "));
-	}
-
-	else if(Multiplier < 1)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Medium Speed & Damage"));
-	}
-
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Normal Speed & Damage"));
-	}
-}
-
-void AJeremy::EquipAmmo(EAmmoType AmmoType)
-{
 	if(bCharging)
-		return;
-
-	TSubclassOf<AProjectileBase> DesiredProjectile = nullptr;
-	FString AmmoName;
-
-	switch(AmmoType)
 	{
-		case EAmmoType::Red:
-			DesiredProjectile = RedProjectile;
-			AmmoName = "Red";
-			break;
+		UE_LOG(LogTemp, Warning, TEXT("Slingshot Fired"));
 
-		case EAmmoType::Green:
-			DesiredProjectile = GreenProjectile;
-			AmmoName = "Green";
-			break;
+		if (ChargeValue < .15)
+			ChargeValue = .15;
+	
+		SpawnProjectile(ChargeValue);	// ChargeValue USED AS DAMAGE/SPEED MULTIPLIER  //
+		PlaySound(SlingshotFired);
 
-		case EAmmoType::Blue:
-			DesiredProjectile = BlueProjectile;
-			AmmoName = "Blue";
-			break;
+		// RESET CHARGE VALUES //
+		ChargeValue = 0;	
+		if(bChargeFull)
+			bChargeFull = false;
 
-		case EAmmoType::Yellow:
-			DesiredProjectile = YellowProjectile;
-			AmmoName = "Yellow";
-			break;
-	}
-
-	if(CurrentProjectile != DesiredProjectile)
-	{
-		CurrentProjectile = DesiredProjectile;
-		PlaySound(SwitchAmmo);
-		UE_LOG(LogTemp, Warning, TEXT("%s Ammo selected"), *AmmoName);
+		bCharging = false;
 	}
 }
+
+
+
 
 void AJeremy::EquipAmmoSlot1()
 {
-	EquipAmmo(EAmmoType::Red);
+	if(CurrentAmmoType != EAmmoType::Red && !bCharging)
+	{
+		EQUIP_AMMO_TYPE(EAmmoType::Red);
+		CurrentAmmoType = EAmmoType::Red;
+	}
 }
 
 void AJeremy::EquipAmmoSlot2()
 {
-	EquipAmmo(EAmmoType::Green);
+	if(CurrentAmmoType != EAmmoType::Green && !bCharging)
+	{
+		EQUIP_AMMO_TYPE(EAmmoType::Green);
+		CurrentAmmoType = EAmmoType::Green;
+	}
 }
 
 void AJeremy::EquipAmmoSlot3()
 {
-	EquipAmmo(EAmmoType::Blue);
+	if(CurrentAmmoType != EAmmoType::Blue && !bCharging)
+	{
+		EQUIP_AMMO_TYPE(EAmmoType::Blue);
+		CurrentAmmoType = EAmmoType::Blue;
+	}
 }
 
 void AJeremy::EquipAmmoSlot4()
 {
-	EquipAmmo(EAmmoType::Yellow);
+	if(CurrentAmmoType != EAmmoType::Yellow && !bCharging)
+	{
+		EQUIP_AMMO_TYPE(EAmmoType::Yellow);
+		CurrentAmmoType = EAmmoType::Yellow;
+	}
 }
 
 

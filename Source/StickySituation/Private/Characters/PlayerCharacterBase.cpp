@@ -94,27 +94,7 @@ void APlayerCharacterBase::BeginPlay()
 	AnimInstance = GetMesh()->GetAnimInstance();
 	if(AnimInstance != nullptr)
 		AnimInstance->OnMontageEnded.AddDynamic(this, &APlayerCharacterBase::OnMontageFinished);
-	
 }
-
-
-// INTERFACE EVENTS //
-
-void APlayerCharacterBase::DamagePlayer_Implementation(float Damage)
-{
-	CurrentHealth -= Damage;
-	UE_LOG(LogTemp, Warning, TEXT("Player Current Health: %f"), CurrentHealth);
-}
-
-void APlayerCharacterBase::HealPlayer_Implementation(float Heal)
-{
-	CurrentHealth += Heal;
-	UE_LOG(LogTemp, Warning, TEXT("Current Health: %f"), CurrentHealth);
-}
-
-
-
-// INPUT EVENTS //
 
 void APlayerCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -174,28 +154,20 @@ void APlayerCharacterBase::Look(const FInputActionValue& Value)
 }
 
 
-
-// ANIMATION SETUP //
-float APlayerCharacterBase::PlayAnimMontage(UAnimMontage* AnimMontage, float InPlayRate, FName StartSectionName)
+// INTERFACE EVENTS //
+void APlayerCharacterBase::DamagePlayer_Implementation(float Damage)
 {
-	float MontageLength = 0.f;
-	if(AnimMontage && AnimInstance)
-	{
-		MontageLength = AnimInstance->Montage_Play(AnimMontage, InPlayRate);
-	}
-	return MontageLength;
+	CurrentHealth -= Damage;
+	UE_LOG(LogTemp, Warning, TEXT("Player Current Health: %f"), CurrentHealth);
+}
+
+void APlayerCharacterBase::HealPlayer_Implementation(float Heal)
+{
+	CurrentHealth += Heal;
+	UE_LOG(LogTemp, Warning, TEXT("Current Health: %f"), CurrentHealth);
 }
 
 
-void APlayerCharacterBase::OnMontageFinished(UAnimMontage* Montage, bool bMontageInterrupted)
-{
-	bAttacking = false;
-}
-
-void APlayerCharacterBase::OnWeaponCollisionOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-}
 
 void APlayerCharacterBase::ActivateMelee()
 {
@@ -206,6 +178,62 @@ void APlayerCharacterBase::DeactivateMelee()
 {
 	MeleeWeapon_Collision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
+
+void APlayerCharacterBase::OnWeaponCollisionOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+}
+
+
+
+void APlayerCharacterBase::UseAmmo(EAmmoType CurrentAmmo)
+{
+	int32* AmmoCount = AmmoCountMap.Find(CurrentAmmo);
+	if(*AmmoCount > 0)
+		(*AmmoCount)--;
+}
+
+void APlayerCharacterBase::SpawnProjectile(float Multiplier)
+{
+	FVector SpawnLocation = GetMesh()->GetBoneLocation("Head") + (FollowCamera->GetForwardVector() * 250);
+	FRotator SpawnRotation = FollowCamera->GetComponentRotation();
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+	SpawnParams.Instigator = GetInstigator();
+
+	AProjectileBase* Projectile = GetWorld()->SpawnActor<AProjectileBase>
+		(
+		CurrentProjectile,
+		SpawnLocation,
+		SpawnRotation,
+		SpawnParams
+		);
+
+	Projectile->SetCurrentSpeed(Multiplier);
+	Projectile->SetBaseDamage(Multiplier);
+
+	UseAmmo(CurrentAmmoType);
+}
+
+
+
+float APlayerCharacterBase::PlayAnimMontage(UAnimMontage* AnimMontage, float InPlayRate, FName StartSectionName)
+{
+	float MontageLength = 0.f;
+	if(AnimMontage && AnimInstance)
+	{
+		MontageLength = AnimInstance->Montage_Play(AnimMontage, InPlayRate);
+	}
+	return MontageLength;
+}
+
+void APlayerCharacterBase::OnMontageFinished(UAnimMontage* Montage, bool bMontageInterrupted)
+{
+	bAttacking = false;
+}
+
+
 
 void APlayerCharacterBase::PlaySound(USoundBase* Sound)
 {
