@@ -193,7 +193,7 @@ void AJeremy::Grapple()
 
 	check(GrappleComponent);
 	
-	if(GrappleComponent)
+	if(GrappleComponent && bGrappleAvailable)
 	{
 		FVector StartLocation = GetMesh()->GetBoneLocation("Head") + (FollowCamera->GetForwardVector() * 250);
 		FRotator Rotation = FollowCamera->GetComponentRotation();
@@ -203,17 +203,20 @@ void AJeremy::Grapple()
 		
 		GrappleComponent->ActivateGrapple(StartLocation, Rotation, EndLocation);
 
-		GrappleRefresh();
+		bGrappleAvailable = false;
+
+		GetWorld()->GetTimerManager().SetTimer(GrappleRefreshTimer, this, &AJeremy::GrappleRefresh, RefreshGrappleTime, false);
 	}
 
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("GrappleComponent not attached"));
+		UE_LOG(LogTemp, Warning, TEXT("Grapple refreshing"));
+		PlaySound(GrappleUnavailable);
 	}
 }
 
 void AJeremy::GrappleRefresh()
 {
-	
+	bGrappleAvailable = true;;
 }
 

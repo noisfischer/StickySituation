@@ -50,15 +50,14 @@ public:
 	// SFX - assign in child BP //
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SFX")
 	USoundBase* SlingshotPull = nullptr;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SFX")
 	USoundBase* SlingshotFullCharge = nullptr;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SFX")
 	USoundBase* SlingshotFired = nullptr;
-	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SFX")
 	USoundBase* SwitchAmmo = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SFX")
+	USoundBase* GrappleUnavailable = nullptr;
 
 	
 
@@ -85,6 +84,8 @@ protected:
 	void EquipAmmoSlot3();
 	void EquipAmmoSlot4();
 
+	float RefreshGrappleTime = 1.f;
+	bool bGrappleAvailable = true;
 	FTimerHandle GrappleRefreshTimer;
 	void Grapple();
 	void GrappleRefresh();
