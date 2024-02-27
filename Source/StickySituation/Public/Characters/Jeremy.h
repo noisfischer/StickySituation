@@ -25,19 +25,16 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* AmmoSlotAction_1 = nullptr;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* AmmoSlotAction_2 = nullptr;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* AmmoSlotAction_3 = nullptr;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* AmmoSlotAction_4 = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* GrappleAction = nullptr;
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* MeleeAction = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
@@ -88,7 +85,9 @@ protected:
 	void EquipAmmoSlot3();
 	void EquipAmmoSlot4();
 
+	FTimerHandle GrappleRefreshTimer;
 	void Grapple();
+	void GrappleRefresh();
 
 	void Melee();
 	

@@ -151,8 +151,6 @@ void AJeremy::FireSlingshot()
 }
 
 
-
-
 void AJeremy::EquipAmmoSlot1()
 {
 	if(CurrentAmmoType != EAmmoType::Red && !bCharging)
@@ -204,11 +202,18 @@ void AJeremy::Grapple()
 		FVector EndLocation = StartLocation + (CameraDirection * GrappleComponent->GrappleRange);
 		
 		GrappleComponent->ActivateGrapple(StartLocation, Rotation, EndLocation);
+
+		GrappleRefresh();
 	}
 
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("GrappleComponent not attached"));
 	}
+}
+
+void AJeremy::GrappleRefresh()
+{
+	
 }
 
