@@ -37,8 +37,13 @@ void AJeremy::BeginPlay()
 	if(StartProjectile != nullptr)
 		CurrentProjectile = StartProjectile;
 	else
-		CurrentProjectile = RedProjectile;
-
+	{
+		TSubclassOf<AProjectileBase>* TemporaryProjectile = ProjectileMap.Find(EAmmoType::Red);
+		if(TemporaryProjectile)
+			CurrentProjectile = *TemporaryProjectile;
+		//CurrentProjectile = RedProjectile;
+	}
+	
 	ensure(GrappleComponent);
 	ensure(!ProjectileMap.Num() == 0);
 	ensure(!AmmoCountMap.Num() == 0);

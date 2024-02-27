@@ -94,6 +94,7 @@ void APlayerCharacterBase::BeginPlay()
 	AnimInstance = GetMesh()->GetAnimInstance();
 	if(AnimInstance != nullptr)
 		AnimInstance->OnMontageEnded.AddDynamic(this, &APlayerCharacterBase::OnMontageFinished);
+	
 }
 
 

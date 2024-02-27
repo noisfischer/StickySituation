@@ -73,6 +73,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="1 - HEALTH")
 	bool Dead = false;
 
+	// POPULATE THESE IN YOUR CHILD BPs! //
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
 	TMap<EAmmoType, TSubclassOf<AProjectileBase>> ProjectileMap;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
