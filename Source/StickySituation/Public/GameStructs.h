@@ -1,16 +1,23 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
+#include "Projectiles/ProjectileBase.h"
 #include "GameStructs.generated.h"
 
-USTRUCT(Blueprintable)
-struct FProjectileAttributes
+USTRUCT(BlueprintType)
+struct FProjectileData
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float ProjectileDamage = 0;
+	TSubclassOf<AProjectileBase> ProjectileClass = nullptr;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 AmmoCount = 0;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Damage = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float ProjectileSpeed = 0;
+	float Speed = 0;
 };

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameEnums.h"
+#include "GameStructs.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "Interfaces/CharacterInterface.h"
@@ -72,30 +73,14 @@ public:
 	float CurrentHealth = MaxHealth;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="1 - HEALTH")
 	bool Dead = false;
-
-	// POPULATE THESE IN YOUR CHILD BPs! //
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
-	TMap<EAmmoType, TSubclassOf<AProjectileBase>> ProjectileMap;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
-	TMap<EAmmoType, int32> AmmoCountMap;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
-	EAmmoType CurrentAmmoType = EAmmoType::Red;
-
-	// USED TO SET THE CURRENT AMMO TYPE //
-	UPROPERTY(EditDefaultsOnly, Category = "2 - AMMO")
-	TSubclassOf<AProjectileBase> CurrentProjectile = nullptr;
-
-	// AMMO //
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="2 - AMMO")
-	int32 RedAmmo = 1;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="2 - AMMO")
-	int32 GreenAmmo = 1;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="2 - AMMO")
-	int32 BlueAmmo = 1;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="2 - AMMO")
-	int32 YellowAmmo = 1;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
+	EAmmoType CurrentAmmoName = EAmmoType::Red;
 
+	// POPULATE THIS IN YOUR CHILD BPs! //
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
+	TMap<EAmmoType, FProjectileData> AmmoMap;
+	
 	// SOCKET NAMES FOR ATTACHMENT TO SKELETAL MESH //
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="3 - SOCKET NAMES")
 	FName Backpack_SocketName = "BackpackSocket";
@@ -129,8 +114,6 @@ public:
 	
 protected:
 	virtual float PlayAnimMontage(UAnimMontage* AnimMontage, float InPlayRate, FName StartSectionName) override;
-
-	virtual void UseAmmo(EAmmoType CurrentAmmo);
 	
 	void SpawnProjectile(float Multiplier);
 	

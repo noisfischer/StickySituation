@@ -35,9 +35,8 @@ void AJeremy::BeginPlay()
 	}
 
 	ensure(GrappleComponent);
-	ensure(!ProjectileMap.Num() == 0);
-	ensure(!AmmoCountMap.Num() == 0);
-
+	ensure(!AmmoMap.Num() == 0);
+	
 	InitializeAmmo();
 }
 
@@ -61,18 +60,12 @@ void AJeremy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 		EnhancedInputComponent->BindAction(GrappleAction, ETriggerEvent::Triggered, this, &AJeremy::Grapple);
 
 		EnhancedInputComponent->BindAction(MeleeAction, ETriggerEvent::Triggered, this, &AJeremy::Melee);
-
 	}
 }
 
 void AJeremy::InitializeAmmo()
 {
-	EQUIP_AMMO_TYPE(CurrentAmmoType);	// from GameMacros.h
-
-	AmmoCountMap.Add(EAmmoType::Red, 1);
-	AmmoCountMap.Add(EAmmoType::Green, 1);
-	AmmoCountMap.Add(EAmmoType::Blue, 1);
-	AmmoCountMap.Add(EAmmoType::Yellow, 1);
+	// check if any upgrades/skills equipped
 }
 
 void AJeremy::Melee()
@@ -100,8 +93,9 @@ void AJeremy::OnWeaponCollisionOverlap(UPrimitiveComponent* OverlappedComponent,
 
 void AJeremy::StartSlingshotPull()
 {
-	if(*AmmoCountMap.Find(CurrentAmmoType) != 0)
+	if(AmmoMap.Find(CurrentAmmoName)->AmmoCount != 0)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Slingshot Charge Begins"));
 		bCharging = true;
 		PlaySound(SlingshotPull);
 	}
@@ -114,7 +108,8 @@ void AJeremy::ChargeSlingshot()
 	{
 		ChargeValue += 1 * GetWorld()->GetDeltaSeconds();	// CHARGE EVERY TICK //
 		ChargeValue = FMath::Clamp(ChargeValue, 0, 1);
-		UE_LOG(LogTemp, Warning, TEXT("Charge: %f"), ChargeValue);
+		if(ChargeValue == 1)
+			UE_LOG(LogTemp, Warning, TEXT("Fully Charged"));
 	}
 
 	else
@@ -133,7 +128,6 @@ void AJeremy::FireSlingshot()
 {
 	if(bCharging)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Slingshot Fired"));
 
 		if (ChargeValue < .15)
 			ChargeValue = .15;
@@ -153,37 +147,33 @@ void AJeremy::FireSlingshot()
 
 void AJeremy::EquipAmmoSlot1()
 {
-	if(CurrentAmmoType != EAmmoType::Red && !bCharging)
+	if(CurrentAmmoName != EAmmoType::Red && !bCharging)
 	{
-		EQUIP_AMMO_TYPE(EAmmoType::Red);
-		CurrentAmmoType = EAmmoType::Red;
+		CurrentAmmoName = EAmmoType::Red;
 	}
 }
 
 void AJeremy::EquipAmmoSlot2()
 {
-	if(CurrentAmmoType != EAmmoType::Green && !bCharging)
+	if(CurrentAmmoName != EAmmoType::Green && !bCharging)
 	{
-		EQUIP_AMMO_TYPE(EAmmoType::Green);
-		CurrentAmmoType = EAmmoType::Green;
+		CurrentAmmoName = EAmmoType::Green;
 	}
 }
 
 void AJeremy::EquipAmmoSlot3()
 {
-	if(CurrentAmmoType != EAmmoType::Blue && !bCharging)
+	if(CurrentAmmoName != EAmmoType::Blue && !bCharging)
 	{
-		EQUIP_AMMO_TYPE(EAmmoType::Blue);
-		CurrentAmmoType = EAmmoType::Blue;
+		CurrentAmmoName = EAmmoType::Blue;
 	}
 }
 
 void AJeremy::EquipAmmoSlot4()
 {
-	if(CurrentAmmoType != EAmmoType::Yellow && !bCharging)
+	if(CurrentAmmoName != EAmmoType::Yellow && !bCharging)
 	{
-		EQUIP_AMMO_TYPE(EAmmoType::Yellow);
-		CurrentAmmoType = EAmmoType::Yellow;
+		CurrentAmmoName = EAmmoType::Yellow;
 	}
 }
 

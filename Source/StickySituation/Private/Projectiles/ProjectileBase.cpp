@@ -37,7 +37,6 @@ void AProjectileBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// BIND "OnHit" FUNCTION TO "OnComponentHit" EVENT OF "ProjectileMesh" //
 	ProjectileMesh->OnComponentHit.AddDynamic(this, &AProjectileBase::OnHit);
 	
 }
@@ -55,7 +54,7 @@ void AProjectileBase::OnHit(UPrimitiveComponent* HitComponent, AActor* HitActor,
 {
 	if(HitActor && HitActor->ActorHasTag("enemy"))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Enemy Hit!"));
+		UE_LOG(LogTemp, Warning, TEXT("Direct Hit!"));
 
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
 			this,
@@ -66,11 +65,9 @@ void AProjectileBase::OnHit(UPrimitiveComponent* HitComponent, AActor* HitActor,
 
 		UGameplayStatics::PlaySoundAtLocation(
 			this,
-			ProjectileImpactSound,
+			DirectImpactSound,
 			Hit.Location
 			);
-
-		this->Destroy();
 	}
 
 	else
@@ -85,12 +82,12 @@ void AProjectileBase::OnHit(UPrimitiveComponent* HitComponent, AActor* HitActor,
 
 		UGameplayStatics::PlaySoundAtLocation(
 			this,
-			ProjectileImpactSound,
+			DestroyedSound,
 			Hit.Location
 			);
-
-		this->Destroy();
 	}
+
+	this->Destroy();
 }
 
 float AProjectileBase::GetBaseDamage()

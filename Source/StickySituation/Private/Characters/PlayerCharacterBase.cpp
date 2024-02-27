@@ -9,6 +9,7 @@
 #include "GameFramework/Controller.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "GameMacros.h"
 #include "InputActionValue.h"
 #include "SPinValueInspector.h"
 #include "Kismet/GameplayStatics.h"
@@ -185,14 +186,6 @@ void APlayerCharacterBase::OnWeaponCollisionOverlap(UPrimitiveComponent* Overlap
 }
 
 
-
-void APlayerCharacterBase::UseAmmo(EAmmoType CurrentAmmo)
-{
-	int32* AmmoCount = AmmoCountMap.Find(CurrentAmmo);
-	if(*AmmoCount > 0)
-		(*AmmoCount)--;
-}
-
 void APlayerCharacterBase::SpawnProjectile(float Multiplier)
 {
 	FVector SpawnLocation = GetMesh()->GetBoneLocation("Head") + (FollowCamera->GetForwardVector() * 250);
@@ -202,18 +195,23 @@ void APlayerCharacterBase::SpawnProjectile(float Multiplier)
 	SpawnParams.Owner = this;
 	SpawnParams.Instigator = GetInstigator();
 
-	AProjectileBase* Projectile = GetWorld()->SpawnActor<AProjectileBase>
-		(
-		CurrentProjectile,
-		SpawnLocation,
-		SpawnRotation,
-		SpawnParams
-		);
+	TSubclassOf<AProjectileBase> SpawnProjectile = AmmoMap.Find(CurrentAmmoName)->ProjectileClass;
 
-	Projectile->SetCurrentSpeed(Multiplier);
-	Projectile->SetBaseDamage(Multiplier);
+	if(*SpawnProjectile)
+	{
+		AProjectileBase* Projectile = GetWorld()->SpawnActor<AProjectileBase>
+			(
+			SpawnProjectile,
+			SpawnLocation,
+			SpawnRotation,
+			SpawnParams
+			);
 
-	UseAmmo(CurrentAmmoType);
+		Projectile->SetCurrentSpeed(Multiplier);
+		Projectile->SetBaseDamage(Multiplier);
+		
+		DECREMENT_AMMO(CurrentAmmoName);	// in GameMacros.h
+	}
 }
 
 
