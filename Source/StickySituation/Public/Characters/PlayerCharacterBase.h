@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameEnums.h"
 #include "GameStructs.h"
+#include "Components/SkillTreeComponent.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "Interfaces/CharacterInterface.h"
@@ -60,6 +61,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Mesh)
 	UCapsuleComponent* MeleeWeapon_Collision;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
+	USkillTreeComponent* CharacterSkillTreeComponent;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Animation")
 	UAnimInstance* AnimInstance = nullptr;
 

@@ -38,6 +38,8 @@ void AJeremy::BeginPlay()
 	ensure(!ProjectileMap.Num() == 0);
 	
 	InitializeAmmo();
+
+	CharacterSkillTreeComponent->UnlockSkill(TEXT("MovementSpeed"));
 }
 
 void AJeremy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

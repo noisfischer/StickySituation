@@ -10,6 +10,3 @@ enum class EAmmoType : uint8
 	Blue  UMETA(DisplayName = "Blue"),
 	Yellow  UMETA(DisplayName = "Yellow"),
 };
-
-
-

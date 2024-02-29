@@ -21,3 +21,22 @@ struct FProjectileData
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Speed = 0;
 };
+
+USTRUCT(BlueprintType)
+struct FCharacterSkills
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString Name;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString Description;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Value;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsUnlocked = false;
+};

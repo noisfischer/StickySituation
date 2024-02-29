@@ -25,7 +25,6 @@ DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 // CONSTRUCTOR //
 APlayerCharacterBase::APlayerCharacterBase()
 {
-
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 		
 	// CAMERA ROTATION PROPERTIES //
@@ -70,6 +69,8 @@ APlayerCharacterBase::APlayerCharacterBase()
 	MeleeWeapon_Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeleeWeapon"));
 	if(MeleeWeapon_SocketName.IsValid())
 		MeleeWeapon_Mesh->SetupAttachment(GetMesh(), MeleeWeapon_SocketName);
+
+	CharacterSkillTreeComponent = CreateDefaultSubobject<USkillTreeComponent>(TEXT("CharacterSkillTree"));
 
 	MeleeWeapon_Collision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("MeleeWeaponCollision"));
 	MeleeWeapon_Collision->SetupAttachment(MeleeWeapon_Mesh);
