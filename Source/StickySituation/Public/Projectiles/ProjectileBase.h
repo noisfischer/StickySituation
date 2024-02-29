@@ -36,8 +36,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "4 - SFX")
 	USoundBase* DestroyedSound;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="5 - DAMAGE")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="1 - DAMAGE")
 	float BaseDamage = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="1 - DAMAGE")
+	float BlastRadius = 250.f;
+
+	UFUNCTION()
+	virtual void Explosion(float Radius);
 	
 	UFUNCTION()
 	virtual void OnHit(

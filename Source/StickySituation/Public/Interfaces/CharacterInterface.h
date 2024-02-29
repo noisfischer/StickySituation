@@ -28,5 +28,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void DamageEnemy(float Damage);
-	
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void AcidDamage(float Damage);
 };

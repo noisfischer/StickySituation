@@ -49,8 +49,47 @@ void AProjectileBase::Tick(float DeltaTime)
 }
 
 
+void AProjectileBase::Explosion(float Radius)
+{
+	TArray<FHitResult> HitResults;
+	FCollisionQueryParams QueryParams;
+	
+	GetWorld()->SweepMultiByChannel(
+		HitResults,
+		GetActorLocation(),
+		GetActorLocation(),
+		FQuat::Identity,
+		ECC_Pawn,
+		FCollisionShape::MakeSphere(Radius),
+		QueryParams
+		);
+
+	DrawDebugSphere(
+		GetWorld(),
+		GetActorLocation(),
+		Radius,
+		50,
+		FColor::Red,
+		false,
+		2.f,
+		0
+		);
+
+	if(HitResults.Num() > 0)
+	{
+		for(auto Hit : HitResults)
+		{
+			if(Hit.GetActor()->ActorHasTag("enemy"))
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Enemy Hit!"));
+			}
+		}
+	}
+		
+}
+
 void AProjectileBase::OnHit(UPrimitiveComponent* HitComponent, AActor* HitActor, UPrimitiveComponent* OtherComp,
-	FVector NormalImpulse, const FHitResult& Hit)
+                            FVector NormalImpulse, const FHitResult& Hit)
 {
 	if(HitActor && HitActor->ActorHasTag("enemy"))
 	{
@@ -86,9 +125,8 @@ void AProjectileBase::OnHit(UPrimitiveComponent* HitComponent, AActor* HitActor,
 			Hit.Location
 			);
 	}
-
-	this->Destroy();
 }
+
 
 float AProjectileBase::GetBaseDamage()
 {

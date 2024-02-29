@@ -14,12 +14,8 @@ class STICKYSITUATION_API ARedProjectile : public AProjectileBase
 public:
 	ARedProjectile();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="1 - DAMAGE")
-	float BlastRadius = 250.f;
-
 private:
 	virtual void BeginPlay() override;
 	
-	void Explosion();
 	virtual void OnHit(UPrimitiveComponent* HitComponent, AActor* HitActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) override;
 };
