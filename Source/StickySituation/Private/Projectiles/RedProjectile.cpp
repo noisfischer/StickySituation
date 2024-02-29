@@ -15,16 +15,13 @@ void ARedProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* HitActor, 
 	FVector NormalImpulse, const FHitResult& Hit)
 {
 	Super::OnHit(HitComponent, HitActor, OtherComp, NormalImpulse, Hit);
-
-	PerformRadialBlast(BlastRadius);
-
+	PerformRadialBlast(BlastRadius); // iterates through hit enemies and performs RadialBlastAction()
 	this->Destroy();
 }
 
 void ARedProjectile::RadialBlastAction(AActor* Enemy)
 {
 	Super::RadialBlastAction(Enemy);
-
-	Execute_DamageEnemy(Enemy, BaseDamage);
+	Execute_DamageEnemy(Enemy, Damage);
 }
 

@@ -35,7 +35,7 @@ void AJeremy::BeginPlay()
 	}
 
 	ensure(GrappleComponent);
-	ensure(!AmmoMap.Num() == 0);
+	ensure(!ProjectileMap.Num() == 0);
 	
 	InitializeAmmo();
 }
@@ -66,6 +66,7 @@ void AJeremy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void AJeremy::InitializeAmmo()
 {
 	// check if any upgrades/skills equipped
+		// i.e. ProjectileMap.Find(EAmmoType::Red)->Damage += 1;
 }
 
 void AJeremy::Melee()
@@ -93,13 +94,12 @@ void AJeremy::OnWeaponCollisionOverlap(UPrimitiveComponent* OverlappedComponent,
 
 void AJeremy::StartSlingshotPull()
 {
-	if(AmmoMap.Find(CurrentAmmoName)->AmmoCount != 0)
+	if(ProjectileMap.Find(CurrentAmmoName)->AmmoCount != 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Slingshot Charge Begins"));
 		bCharging = true;
 		PlaySound(SlingshotPull);
 	}
-	
 }
 
 void AJeremy::ChargeSlingshot()
@@ -128,11 +128,10 @@ void AJeremy::FireSlingshot()
 {
 	if(bCharging)
 	{
-
 		if (ChargeValue < .15)
 			ChargeValue = .15;
 	
-		SpawnProjectile(ChargeValue);	// ChargeValue USED AS DAMAGE/SPEED MULTIPLIER  //
+		SpawnProjectile(ChargeValue, ChargeValue);
 		PlaySound(SlingshotFired);
 
 		// RESET CHARGE VALUES //
@@ -148,33 +147,25 @@ void AJeremy::FireSlingshot()
 void AJeremy::EquipAmmoSlot1()
 {
 	if(CurrentAmmoName != EAmmoType::Red && !bCharging)
-	{
 		CurrentAmmoName = EAmmoType::Red;
-	}
 }
 
 void AJeremy::EquipAmmoSlot2()
 {
 	if(CurrentAmmoName != EAmmoType::Green && !bCharging)
-	{
 		CurrentAmmoName = EAmmoType::Green;
-	}
 }
 
 void AJeremy::EquipAmmoSlot3()
 {
 	if(CurrentAmmoName != EAmmoType::Blue && !bCharging)
-	{
 		CurrentAmmoName = EAmmoType::Blue;
-	}
 }
 
 void AJeremy::EquipAmmoSlot4()
 {
 	if(CurrentAmmoName != EAmmoType::Yellow && !bCharging)
-	{
 		CurrentAmmoName = EAmmoType::Yellow;
-	}
 }
 
 

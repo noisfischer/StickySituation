@@ -28,7 +28,6 @@ AProjectileBase::AProjectileBase()
 	ProjectileMovementComponent->bRotationFollowsVelocity = true;
 	ProjectileMovementComponent->bShouldBounce = false;
 	ProjectileMovementComponent->bIsHomingProjectile = false;
-
 }
 
 
@@ -36,9 +35,7 @@ AProjectileBase::AProjectileBase()
 void AProjectileBase::BeginPlay()
 {
 	Super::BeginPlay();
-
 	ProjectileMesh->OnComponentHit.AddDynamic(this, &AProjectileBase::OnHit);
-	
 }
 
 
@@ -125,17 +122,20 @@ void AProjectileBase::OnHit(UPrimitiveComponent* HitComponent, AActor* HitActor,
 			Hit.Location
 			);
 	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Speed: %f"), GetCurrentSpeed());
+	UE_LOG(LogTemp, Warning, TEXT("Damage: %f"), Damage);
 }
 
 
-float AProjectileBase::GetBaseDamage()
+float AProjectileBase::GetDamage()
 {
-	return BaseDamage;
+	return Damage;
 }
 
-void AProjectileBase::SetBaseDamage(float ChargeValue)
+void AProjectileBase::SetDamage(float NewDamage)
 {
-	BaseDamage = BaseDamage * ChargeValue;
+	Damage = NewDamage;
 }
 
 float AProjectileBase::GetCurrentSpeed()
@@ -143,8 +143,8 @@ float AProjectileBase::GetCurrentSpeed()
 	return ProjectileMovementComponent->MaxSpeed;
 }
 
-void AProjectileBase::SetCurrentSpeed(float ChargeValue)
+void AProjectileBase::SetCurrentSpeed(float NewSpeed)
 {
-	ProjectileMovementComponent->MaxSpeed = GetCurrentSpeed() * ChargeValue;
+	ProjectileMovementComponent->MaxSpeed = NewSpeed;
 	ProjectileMovementComponent->InitialSpeed = ProjectileMovementComponent->MaxSpeed;
 }

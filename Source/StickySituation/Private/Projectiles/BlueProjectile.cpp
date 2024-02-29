@@ -17,13 +17,12 @@ void ABlueProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* HitActor,
 	FVector NormalImpulse, const FHitResult& Hit)
 {
 	Super::OnHit(HitComponent, HitActor, OtherComp, NormalImpulse, Hit);
-
-	PerformRadialBlast(BlastRadius);	// calls RadialBlastAction
+	PerformRadialBlast(BlastRadius); // iterates through hit enemies and performs RadialBlastAction()
+	this->Destroy();
 }
 
 void ABlueProjectile::RadialBlastAction(AActor* Enemy)
 {
 	Super::RadialBlastAction(Enemy);
-
 	Execute_StunEnemy(Enemy);
 }

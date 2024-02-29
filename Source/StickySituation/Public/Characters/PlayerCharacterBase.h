@@ -79,7 +79,7 @@ public:
 
 	// POPULATE THIS IN YOUR CHILD BPs! //
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
-	TMap<EAmmoType, FProjectileData> AmmoMap;
+	TMap<EAmmoType, FProjectileData> ProjectileMap;
 	
 	// SOCKET NAMES FOR ATTACHMENT TO SKELETAL MESH //
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="3 - SOCKET NAMES")
@@ -115,7 +115,7 @@ public:
 protected:
 	virtual float PlayAnimMontage(UAnimMontage* AnimMontage, float InPlayRate, FName StartSectionName) override;
 	
-	void SpawnProjectile(float Multiplier);
+	void SpawnProjectile(float DamageMultiplier, float SpeedMultiplier);
 	
 	bool bAttacking = false;
 

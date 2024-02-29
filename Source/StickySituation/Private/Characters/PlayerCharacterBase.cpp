@@ -186,7 +186,7 @@ void APlayerCharacterBase::OnWeaponCollisionOverlap(UPrimitiveComponent* Overlap
 }
 
 
-void APlayerCharacterBase::SpawnProjectile(float Multiplier)
+void APlayerCharacterBase::SpawnProjectile(float DamageMultiplier, float SpeedMultiplier)
 {
 	FVector SpawnLocation = GetMesh()->GetBoneLocation("Head") + (FollowCamera->GetForwardVector() * 250);
 	FRotator SpawnRotation = FollowCamera->GetComponentRotation();
@@ -195,7 +195,7 @@ void APlayerCharacterBase::SpawnProjectile(float Multiplier)
 	SpawnParams.Owner = this;
 	SpawnParams.Instigator = GetInstigator();
 
-	TSubclassOf<AProjectileBase> SpawnProjectile = AmmoMap.Find(CurrentAmmoName)->ProjectileClass;
+	TSubclassOf<AProjectileBase> SpawnProjectile = ProjectileMap.Find(CurrentAmmoName)->ProjectileClass;
 
 	if(*SpawnProjectile)
 	{
@@ -207,8 +207,8 @@ void APlayerCharacterBase::SpawnProjectile(float Multiplier)
 			SpawnParams
 			);
 
-		Projectile->SetCurrentSpeed(Multiplier);
-		Projectile->SetBaseDamage(Multiplier);
+		Projectile->SetCurrentSpeed(ProjectileMap.Find(CurrentAmmoName)->Speed * SpeedMultiplier);
+		Projectile->SetDamage(ProjectileMap.Find(CurrentAmmoName)->Damage * DamageMultiplier);
 		
 		DECREMENT_AMMO(CurrentAmmoName);	// in GameMacros.h
 	}

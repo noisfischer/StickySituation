@@ -17,7 +17,7 @@ do { \
 // Should only be used in classes derived from PlayerCharacterBase
 #define DECREMENT_AMMO(E_AMMO_NAME) \
 do { \
-	auto* FoundData = AmmoMap.Find(E_AMMO_NAME); \
+	auto* FoundData = ProjectileMap.Find(E_AMMO_NAME); \
 	if (FoundData != nullptr) { \
 		if (FoundData->AmmoCount > 0) { \
 			FoundData->AmmoCount--; \

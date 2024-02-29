@@ -37,7 +37,7 @@ public:
 	USoundBase* DestroyedSound;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="1 - DAMAGE")
-	float BaseDamage = 0;
+	float Damage = 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="1 - DAMAGE")
 	float BlastRadius = 250.f;
@@ -57,13 +57,13 @@ public:
 		);
 
 	UFUNCTION()
-	float GetBaseDamage();
+	float GetDamage();
 	UFUNCTION()
-	virtual void SetBaseDamage(float ChargeValue);
+	virtual void SetDamage(float NewDamage);
 	UFUNCTION()
 	float GetCurrentSpeed();
 	UFUNCTION()
-	virtual void SetCurrentSpeed(float ChargeValue);
+	virtual void SetCurrentSpeed(float NewSpeed);
 
 protected:
 	virtual void BeginPlay() override;
