@@ -43,7 +43,9 @@ public:
 	float BlastRadius = 250.f;
 
 	UFUNCTION()
-	virtual void Explosion(float Radius);
+	virtual void PerformRadialBlast(float Radius);
+	UFUNCTION()
+	virtual void RadialBlastAction(AActor* Enemy);
 	
 	UFUNCTION()
 	virtual void OnHit(

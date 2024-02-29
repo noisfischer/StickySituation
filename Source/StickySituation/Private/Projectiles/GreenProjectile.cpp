@@ -17,8 +17,15 @@ void AGreenProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* HitActor
 {
 	Super::OnHit(HitComponent, HitActor, OtherComp, NormalImpulse, Hit);
 
-	Explosion(BlastRadius);
+	PerformRadialBlast(BlastRadius);
 
 	this->Destroy();
+}
+
+void AGreenProjectile::RadialBlastAction(AActor* Enemy)
+{
+	Super::RadialBlastAction(Enemy);
+
+	Execute_DamageEnemy(Enemy, BaseDamage);
 }
 

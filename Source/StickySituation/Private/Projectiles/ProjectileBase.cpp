@@ -45,11 +45,10 @@ void AProjectileBase::BeginPlay()
 void AProjectileBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 
-void AProjectileBase::Explosion(float Radius)
+void AProjectileBase::PerformRadialBlast(float Radius)
 {
 	TArray<FHitResult> HitResults;
 	FCollisionQueryParams QueryParams;
@@ -78,15 +77,16 @@ void AProjectileBase::Explosion(float Radius)
 	if(HitResults.Num() > 0)
 	{
 		for(auto Hit : HitResults)
-		{
 			if(Hit.GetActor()->ActorHasTag("enemy"))
-			{
-				UE_LOG(LogTemp, Warning, TEXT("Enemy Hit!"));
-			}
-		}
+				RadialBlastAction(Hit.GetActor());
 	}
-		
 }
+
+void AProjectileBase::RadialBlastAction(AActor* Enemy)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Enemy Hit"));
+}
+
 
 void AProjectileBase::OnHit(UPrimitiveComponent* HitComponent, AActor* HitActor, UPrimitiveComponent* OtherComp,
                             FVector NormalImpulse, const FHitResult& Hit)

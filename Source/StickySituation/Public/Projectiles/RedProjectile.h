@@ -14,8 +14,10 @@ class STICKYSITUATION_API ARedProjectile : public AProjectileBase
 public:
 	ARedProjectile();
 
+	
+
 private:
 	virtual void BeginPlay() override;
-	
 	virtual void OnHit(UPrimitiveComponent* HitComponent, AActor* HitActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) override;
+	virtual void RadialBlastAction(AActor* Enemy) override;
 };
