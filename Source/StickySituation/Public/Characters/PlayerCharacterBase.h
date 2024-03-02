@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameEnums.h"
 #include "GameStructs.h"
+#include "SaveCharacterData.h"
 #include "Components/SkillTreeComponent.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
