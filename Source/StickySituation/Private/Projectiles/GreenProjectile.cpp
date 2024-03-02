@@ -4,12 +4,34 @@
 
 AGreenProjectile::AGreenProjectile()
 {
-	//
+	HomingDetectionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("HomingDetection"));
+	HomingDetectionSphere->SetupAttachment(RootComponent);
+	HomingDetectionSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	
+	ProjectileMovementComponent->ProjectileGravityScale = 0.f;
+	ProjectileMovementComponent->bIsHomingProjectile = true;
+	ProjectileMovementComponent->HomingAccelerationMagnitude = 5000.f;
 }
+
 
 void AGreenProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+
+	HomingDetectionSphere->OnComponentBeginOverlap.AddDynamic(this, &AGreenProjectile::HomingDetectionBeginOverlap);
+}
+
+void AGreenProjectile::HomingDetectionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if(OtherActor->ActorHasTag("enemy"))
+	{
+		ProjectileMovementComponent->HomingTargetComponent = OtherActor->GetRootComponent();
+		HomingDetectionSphere->OnComponentBeginOverlap.RemoveDynamic(this, &AGreenProjectile::HomingDetectionBeginOverlap);
+		UE_LOG(LogTemp, Warning, TEXT("Target Locked"));
+		HomingDetectionSphere->DestroyComponent();
+		ProjectileMovementComponent->Velocity = GetActorForwardVector() * ProjectileMovementComponent->InitialSpeed;
+	}
 }
 
 void AGreenProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* HitActor, UPrimitiveComponent* OtherComp,

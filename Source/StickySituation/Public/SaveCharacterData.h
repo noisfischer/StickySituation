@@ -13,8 +13,8 @@ class STICKYSITUATION_API USaveCharacterData : public USaveGame
 public:
 	USaveCharacterData();
 	
-	UPROPERTY(VisibleAnywhere, Category = "Inventory")
-	TArray<FString> CharacterActiveSkills {};
+//	UPROPERTY(VisibleAnywhere, Category = "Inventory")
+//	TArray<FString> CharacterActiveSkills {};
 
 	UFUNCTION(BlueprintCallable)
 	void SaveData(TArray<FString> SkillsList);

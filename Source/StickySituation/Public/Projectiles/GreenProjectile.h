@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/SphereComponent.h"
 #include "Projectiles/ProjectileBase.h"
 #include "GreenProjectile.generated.h"
 
@@ -12,6 +13,13 @@ class STICKYSITUATION_API AGreenProjectile : public AProjectileBase
 
 public:
 	AGreenProjectile();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Mesh)
+	USphereComponent* HomingDetectionSphere;
+
+	UFUNCTION()
+	void HomingDetectionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	
 
 private:
 	virtual void BeginPlay() override;

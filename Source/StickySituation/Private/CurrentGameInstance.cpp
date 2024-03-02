@@ -25,7 +25,7 @@ void UCurrentGameInstance::SaveGame()
 
 	if(dataToSave != nullptr)
 	{
-		dataToSave->CharacterActiveSkills;
+		// dataToSave->CharacterActiveSkills;
 		UGameplayStatics::SaveGameToSlot(dataToSave, "Slot1", 0);
 	}
 	else if(!UGameplayStatics::DoesSaveGameExist("Slot1", 0))
@@ -40,7 +40,7 @@ void UCurrentGameInstance::LoadGame()
 
 	if(dataToLoad != nullptr)
 	{
-		CharacterSkillsList = dataToLoad->CharacterActiveSkills;
+		// CharacterSkillsList = dataToLoad->CharacterActiveSkills;
 	}
 	else if(!UGameplayStatics::DoesSaveGameExist("Slot1", 0))
 	{

@@ -39,6 +39,7 @@ void AJeremy::BeginPlay()
 	ensure(!ProjectileMap.Num() == 0);
 	
 	InitializeAmmo();
+	InitializeUnlockedSkills();
 }
 
 void AJeremy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
