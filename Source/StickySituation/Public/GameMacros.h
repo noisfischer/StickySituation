@@ -30,3 +30,6 @@ do { \
 	UE_LOG(LogTemp, Warning, TEXT("Ammo type '%s' not found."), TEXT(#E_AMMO_NAME)); \
 	} \
 } while (0)
+
+#define GET_SKILL_VALUE(SkillName) \
+	(CharacterSkillTreeComponent->CharacterSkillMap.Find(SkillName) ? CharacterSkillTreeComponent->CharacterSkillMap.Find(SkillName)->Value : 0)

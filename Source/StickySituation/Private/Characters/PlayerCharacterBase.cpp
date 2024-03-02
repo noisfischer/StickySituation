@@ -75,6 +75,9 @@ APlayerCharacterBase::APlayerCharacterBase()
 	MeleeWeapon_Collision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("MeleeWeaponCollision"));
 	MeleeWeapon_Collision->SetupAttachment(MeleeWeapon_Mesh);
 	MeleeWeapon_Collision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	CharacterSkillTreeComponent->OnSkillUnlocked.AddDynamic(this, &APlayerCharacterBase::HandleSkillUnlocked);
+	CharacterSkillTreeComponent->OnSkillRetracted.AddDynamic(this, &APlayerCharacterBase::HandleSkillRetracted);
 }
 
 void APlayerCharacterBase::BeginPlay()
@@ -248,4 +251,26 @@ void APlayerCharacterBase::PlaySound(USoundBase* Sound)
 			this,
 			false
 			);
+}
+
+void APlayerCharacterBase::InitializeUnlockedSkills()
+{
+	if(UnlockedSkills.Num() == 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No Active Skills"));
+		return;
+	}
+	// OTHER LOGIC IN OVERRIDDEN FUNCTIONS IN DERIVED CLASSES
+}
+
+void APlayerCharacterBase::HandleSkillUnlocked(FString SkillName)
+{
+	UnlockedSkills.Add(SkillName);
+	UE_LOG(LogTemp, Warning, TEXT("Skill unlocked"));
+}
+
+void APlayerCharacterBase::HandleSkillRetracted(FString SkillName)
+{
+	UnlockedSkills.Remove(SkillName);
+	UE_LOG(LogTemp, Warning, TEXT("Skill locked"));
 }

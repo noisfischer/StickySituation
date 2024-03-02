@@ -13,8 +13,24 @@ void USkillTreeComponent::BeginPlay()
 
 void USkillTreeComponent::UnlockSkill(const FString& SkillName)
 {
-	if(FCharacterSkills* Skill = CharacterSkillMap.Find(SkillName))	// Attempt to find SkillName
-		UE_LOG(LogTemp, Warning, TEXT("Search Successful"));
+	FCharacterSkills* Skill = CharacterSkillMap.Find(SkillName);
+	
+	if(Skill && !Skill->bIsUnlocked)
+	{
+		Skill->bIsUnlocked = true;
+		OnSkillUnlocked.Broadcast(SkillName); // calls HandleSkillUnlocked in PlayerCharacterBase
+	}
+}
+
+void USkillTreeComponent::RetractSkill(const FString& SkillName)
+{
+	FCharacterSkills* Skill = CharacterSkillMap.Find(SkillName);
+	
+	if(Skill && Skill->bIsUnlocked)
+	{
+		Skill->bIsUnlocked = false;
+		OnSkillRetracted.Broadcast(SkillName);	// calls HandleSkillRetracted in PlayerCharacterBase
+	}
 }
 
 

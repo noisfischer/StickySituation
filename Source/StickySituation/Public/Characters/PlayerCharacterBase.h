@@ -77,6 +77,11 @@ public:
 	float CurrentHealth = MaxHealth;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="1 - HEALTH")
 	bool Dead = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="DAMAGE")
+	float ProjectileDamageMultiplier = 1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="DAMAGE")
+	float MeleeDamageMultiplier = 1;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
 	EAmmoType CurrentAmmoName = EAmmoType::Red;
@@ -115,6 +120,15 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual void PlaySound(USoundBase* Sound);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Skills")
+	TArray<FString> UnlockedSkills;
+	UFUNCTION(BlueprintCallable)
+	virtual void InitializeUnlockedSkills();
+	UFUNCTION(BlueprintCallable)
+	virtual void HandleSkillUnlocked(FString SkillName);
+	UFUNCTION(BlueprintCallable)
+	virtual void HandleSkillRetracted(FString SkillName);
 	
 protected:
 	virtual float PlayAnimMontage(UAnimMontage* AnimMontage, float InPlayRate, FName StartSectionName) override;

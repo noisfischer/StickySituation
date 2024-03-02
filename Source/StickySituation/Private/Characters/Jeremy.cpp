@@ -8,6 +8,7 @@
 #include "Projectiles/ProjectileBase.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Projectiles/RedProjectile.h"
 #include "Projectiles/GreenProjectile.h"
@@ -38,8 +39,6 @@ void AJeremy::BeginPlay()
 	ensure(!ProjectileMap.Num() == 0);
 	
 	InitializeAmmo();
-
-	CharacterSkillTreeComponent->UnlockSkill(TEXT("MovementSpeed"));
 }
 
 void AJeremy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -132,8 +131,10 @@ void AJeremy::FireSlingshot()
 	{
 		if (ChargeValue < .15)
 			ChargeValue = .15;
+
+		float ProjectileDamage = ProjectileDamageMultiplier * ChargeValue;
 	
-		SpawnProjectile(ChargeValue, ChargeValue);
+		SpawnProjectile(ProjectileDamage, ChargeValue);
 		PlaySound(SlingshotFired);
 
 		// RESET CHARGE VALUES //
@@ -200,6 +201,36 @@ void AJeremy::Grapple()
 
 void AJeremy::GrappleRefresh()
 {
-	bGrappleAvailable = true;;
+	bGrappleAvailable = true;
 }
 
+
+void AJeremy::InitializeUnlockedSkills()
+{
+	Super::InitializeUnlockedSkills();	// If activeskills < 0, return
+
+	for(auto skill : UnlockedSkills)
+	{
+		if(skill == "MovementSpeedIncrease")
+		{
+			GetCharacterMovement()->MaxWalkSpeed += GetCharacterMovement()->MaxWalkSpeed * GET_SKILL_VALUE(skill);
+			UE_LOG(LogTemp, Warning, TEXT("MaxSpeed: %f"), GetCharacterMovement()->MaxWalkSpeed);
+		}
+		else if (skill == "MaxHealthIncrease")
+		{
+			MaxHealth += MaxHealth * GET_SKILL_VALUE(skill);
+			CurrentHealth = MaxHealth;
+			UE_LOG(LogTemp, Warning, TEXT("MaxHealth: %f"), MaxHealth);
+		}
+		else if (skill == "MeleeDamageIncrease")
+		{
+			MeleeDamage += MeleeDamage * MeleeDamageMultiplier;
+			UE_LOG(LogTemp, Warning, TEXT("Melee Damage: %f"), MeleeDamage);
+		}
+		else if (skill == "ProjectileDamageIncrease")
+		{
+			ProjectileDamageMultiplier += ProjectileDamageMultiplier * GET_SKILL_VALUE(skill);
+			UE_LOG(LogTemp, Warning, TEXT("Projectile Damage Multiplier: %f"), ProjectileDamageMultiplier);
+		}	
+	}
+}
