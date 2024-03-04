@@ -10,7 +10,7 @@ AGreenProjectile::AGreenProjectile()
 	
 	ProjectileMovementComponent->ProjectileGravityScale = 0.f;
 	ProjectileMovementComponent->bIsHomingProjectile = true;
-	ProjectileMovementComponent->HomingAccelerationMagnitude = 5000.f;
+	ProjectileMovementComponent->HomingAccelerationMagnitude = 10000.f;
 }
 
 

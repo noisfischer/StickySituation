@@ -19,6 +19,36 @@
 AJeremy::AJeremy()
 {
 	GrappleComponent = CreateDefaultSubobject<UGrappleComponent>(TEXT("Grapple"));
+
+	//	CHARACTER SKILL TREE //
+	FCharacterSkills MovementSpeedIncrease;
+	MovementSpeedIncrease.Name = TEXT("MovementSpeedIncrease");
+	MovementSpeedIncrease.Value = 0.5f;
+	MovementSpeedIncrease.Description = FString::Printf(TEXT("Movement speed increase by: %.2f"), MovementSpeedIncrease.Value);
+	
+	FCharacterSkills MaxHealthIncrease;
+	MaxHealthIncrease.Name = TEXT("MaxHealthIncrease");
+	MaxHealthIncrease.Value = 0.5f;
+	MaxHealthIncrease.Description = FString::Printf(TEXT("Max Health increase by: %.2f"), MaxHealthIncrease.Value);
+
+	FCharacterSkills MeleeDamageIncrease;
+	MeleeDamageIncrease.Name = TEXT("MeleeDamageIncrease");
+	MeleeDamageIncrease.Value = 0.15f;
+	MeleeDamageIncrease.Description = FString::Printf(TEXT("Melee damage increase by: %.2f"), MeleeDamageIncrease.Value);
+
+	FCharacterSkills ProjectileDamageIncrease;
+	ProjectileDamageIncrease.Name = TEXT("ProjectileDamageIncrease");
+	ProjectileDamageIncrease.Value = 0.15f;
+	ProjectileDamageIncrease.Description = FString::Printf(TEXT("Projectile damage increase by: %.2f"), ProjectileDamageIncrease.Value);
+
+	CharacterSkillTreeComponent->CharacterSkillMap.Add(MovementSpeedIncrease.Name, MovementSpeedIncrease);
+	CharacterSkillTreeComponent->CharacterSkillMap.Add(MaxHealthIncrease.Name, MaxHealthIncrease);
+	CharacterSkillTreeComponent->CharacterSkillMap.Add(MeleeDamageIncrease.Name, MeleeDamageIncrease);
+	CharacterSkillTreeComponent->CharacterSkillMap.Add(ProjectileDamageIncrease.Name, ProjectileDamageIncrease);
+
+	///////////////////////////////////////////////////////
+	
+	CharacterIdentifier = TEXT("Jeremy");	// for save slot
 }
 
 void AJeremy::BeginPlay()
@@ -39,7 +69,6 @@ void AJeremy::BeginPlay()
 	ensure(!ProjectileMap.Num() == 0);
 	
 	InitializeAmmo();
-	InitializeUnlockedSkills();
 }
 
 void AJeremy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -210,7 +239,7 @@ void AJeremy::InitializeUnlockedSkills()
 {
 	Super::InitializeUnlockedSkills();	// If activeskills < 0, return
 
-	for(auto skill : UnlockedSkills)
+	for(auto skill : ActiveSkills)
 	{
 		if(skill == "MovementSpeedIncrease")
 		{

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameStructs.h"
 #include "GameFramework/SaveGame.h"
 #include "SaveCharacterData.generated.h"
 
@@ -13,9 +14,9 @@ class STICKYSITUATION_API USaveCharacterData : public USaveGame
 public:
 	USaveCharacterData();
 	
-//	UPROPERTY(VisibleAnywhere, Category = "Inventory")
-//	TArray<FString> CharacterActiveSkills {};
+	UPROPERTY(VisibleAnywhere, Category = "Character")
+	TArray<FString> SavedSkills;
 
-	UFUNCTION(BlueprintCallable)
-	void SaveData(TArray<FString> SkillsList);
+	UPROPERTY(VisibleAnywhere, Category="Character")
+	TMap<FString, FCharacterSkills> SavedSkillTreeState;
 };

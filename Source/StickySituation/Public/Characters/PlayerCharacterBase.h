@@ -47,7 +47,15 @@ class APlayerCharacterBase : public ACharacter, public ICharacterInterface
 public:
 	// CONSTRUCTOR DECLARATION //
 	APlayerCharacterBase();
-
+	
+	UFUNCTION()
+	virtual void SaveCharacterSkills();
+	UFUNCTION()
+	virtual void LoadCharacterSkills();
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Save")
+	FString CharacterIdentifier;
+	
 	// COMPONENT DECLARATIONS TO BE INITIALIZED IN CONSTRUCTOR //
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
 	USpringArmComponent* CameraBoom;
@@ -123,13 +131,15 @@ public:
 	virtual void PlaySound(USoundBase* Sound);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Skills")
-	TArray<FString> UnlockedSkills;
+	TArray<FString> ActiveSkills;
 	UFUNCTION(BlueprintCallable)
 	virtual void InitializeUnlockedSkills();
 	UFUNCTION(BlueprintCallable)
 	virtual void HandleSkillUnlocked(FString SkillName);
 	UFUNCTION(BlueprintCallable)
-	virtual void HandleSkillRetracted(FString SkillName);
+	virtual void HandleSkillActivated(FString SkillName);
+	UFUNCTION(BlueprintCallable)
+	virtual void HandleSkillDeactivated(FString SkillName);
 	
 protected:
 	virtual float PlayAnimMontage(UAnimMontage* AnimMontage, float InPlayRate, FName StartSectionName) override;

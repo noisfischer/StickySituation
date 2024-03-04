@@ -77,8 +77,10 @@ APlayerCharacterBase::APlayerCharacterBase()
 	MeleeWeapon_Collision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	CharacterSkillTreeComponent->OnSkillUnlocked.AddDynamic(this, &APlayerCharacterBase::HandleSkillUnlocked);
-	CharacterSkillTreeComponent->OnSkillRetracted.AddDynamic(this, &APlayerCharacterBase::HandleSkillRetracted);
+	CharacterSkillTreeComponent->OnSkillActivated.AddDynamic(this, &APlayerCharacterBase::HandleSkillActivated);
+	CharacterSkillTreeComponent->OnSkillDeactivated.AddDynamic(this, &APlayerCharacterBase::HandleSkillDeactivated);
 }
+
 
 void APlayerCharacterBase::BeginPlay()
 {
@@ -94,12 +96,15 @@ void APlayerCharacterBase::BeginPlay()
 		}
 	}
 
+	LoadCharacterSkills();
+
 	// MELEE ANIMATION SETUP //
 	MeleeWeapon_Collision->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacterBase::OnWeaponCollisionOverlap);
 	AnimInstance = GetMesh()->GetAnimInstance();
 	if(AnimInstance != nullptr)
 		AnimInstance->OnMontageEnded.AddDynamic(this, &APlayerCharacterBase::OnMontageFinished);
 }
+
 
 void APlayerCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -157,7 +162,6 @@ void APlayerCharacterBase::Look(const FInputActionValue& Value)
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
 }
-
 
 // INTERFACE EVENTS //
 void APlayerCharacterBase::DamagePlayer_Implementation(float Damage)
@@ -253,24 +257,57 @@ void APlayerCharacterBase::PlaySound(USoundBase* Sound)
 			);
 }
 
+
+void APlayerCharacterBase::HandleSkillUnlocked(FString SkillName)
+{
+	SaveCharacterSkills();	// saves current CharacterSkillMap values (unlocked)
+}
+
+void APlayerCharacterBase::HandleSkillActivated(FString SkillName)
+{
+	ActiveSkills.Add(SkillName);
+	SaveCharacterSkills();
+	UE_LOG(LogTemp, Warning, TEXT("Skill activated: %s"), *SkillName);
+}
+
+void APlayerCharacterBase::HandleSkillDeactivated(FString SkillName)
+{
+	ActiveSkills.Remove(SkillName);
+	SaveCharacterSkills();
+	UE_LOG(LogTemp, Warning, TEXT("Skill deactivated: %s"), *SkillName);
+}
+
+void APlayerCharacterBase::SaveCharacterSkills()
+{
+	USaveCharacterData* SaveGameInstance = Cast<USaveCharacterData>(UGameplayStatics::CreateSaveGameObject(USaveCharacterData::StaticClass()));
+	SaveGameInstance->SavedSkills = ActiveSkills;
+	SaveGameInstance->SavedSkillTreeState = CharacterSkillTreeComponent->CharacterSkillMap;
+	UGameplayStatics::SaveGameToSlot(SaveGameInstance, CharacterIdentifier, 0);
+	UE_LOG(LogTemp, Warning, TEXT("Saved"));
+}
+
+void APlayerCharacterBase::LoadCharacterSkills()
+{
+	if (UGameplayStatics::DoesSaveGameExist(CharacterIdentifier, 0))
+	{
+		USaveCharacterData* LoadGameInstance = Cast<USaveCharacterData>(UGameplayStatics::LoadGameFromSlot(CharacterIdentifier, 0));
+		if (LoadGameInstance != nullptr)
+		{
+			ActiveSkills = LoadGameInstance->SavedSkills;
+			CharacterSkillTreeComponent->CharacterSkillMap = LoadGameInstance->SavedSkillTreeState;
+			//UE_LOG(LogTemp, Warning, TEXT("Number of skills: %i"), ActiveSkills.Num());
+			InitializeUnlockedSkills();
+		}
+	}
+}
+
 void APlayerCharacterBase::InitializeUnlockedSkills()
 {
-	if(UnlockedSkills.Num() == 0)
+	if(ActiveSkills.Num() == 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("No Active Skills"));
 		return;
 	}
+	
 	// OTHER LOGIC IN OVERRIDDEN FUNCTIONS IN DERIVED CLASSES
-}
-
-void APlayerCharacterBase::HandleSkillUnlocked(FString SkillName)
-{
-	UnlockedSkills.Add(SkillName);
-	UE_LOG(LogTemp, Warning, TEXT("Skill unlocked"));
-}
-
-void APlayerCharacterBase::HandleSkillRetracted(FString SkillName)
-{
-	UnlockedSkills.Remove(SkillName);
-	UE_LOG(LogTemp, Warning, TEXT("Skill locked"));
 }

@@ -20,21 +20,26 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SkillTree")
 	TMap<FString, FCharacterSkills> CharacterSkillMap;
-
-	// Delegate instance for skill unlock notification
+	
+	// Delegate instance for skill unlock/Active notification
 	UPROPERTY(BlueprintAssignable, Category="Skills")
 	FOnSkillUnlocked OnSkillUnlocked;
 	UPROPERTY(BlueprintAssignable, Category="Skills")
-	FOnSkillUnlocked OnSkillRetracted;
+	FOnSkillUnlocked OnSkillActivated;
+	UPROPERTY(BlueprintAssignable, Category="Skills")
+	FOnSkillUnlocked OnSkillDeactivated;
 
 	UFUNCTION(BlueprintCallable)
 	void UnlockSkill(const FString& SkillName);
 	UFUNCTION(BlueprintCallable)
-	void RetractSkill (const FString& SkillName);
-	
+	void ActivateSkill(const FString& SkillName);
+	UFUNCTION(BlueprintCallable)
+	void DeactivateSkill (const FString& SkillName);
 	
 protected:
 	virtual void BeginPlay() override;
+
+	int32 GetNumActiveSkills() const;
 
 public:	
 	// virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

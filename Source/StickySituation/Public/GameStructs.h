@@ -39,4 +39,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsUnlocked = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsActive = false;
 };

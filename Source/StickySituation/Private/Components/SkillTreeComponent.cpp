@@ -1,4 +1,6 @@
 #include "Components/SkillTreeComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "SaveCharacterData.h"
 
 USkillTreeComponent::USkillTreeComponent()
 {
@@ -13,25 +15,56 @@ void USkillTreeComponent::BeginPlay()
 
 void USkillTreeComponent::UnlockSkill(const FString& SkillName)
 {
+	
 	FCharacterSkills* Skill = CharacterSkillMap.Find(SkillName);
 	
 	if(Skill && !Skill->bIsUnlocked)
 	{
 		Skill->bIsUnlocked = true;
-		OnSkillUnlocked.Broadcast(SkillName); // calls HandleSkillUnlocked in PlayerCharacterBase
+		OnSkillUnlocked.Broadcast(SkillName); // bound in base character constructor (data is saved)
 	}
 }
 
-void USkillTreeComponent::RetractSkill(const FString& SkillName)
+int32 USkillTreeComponent::GetNumActiveSkills() const
 {
-	FCharacterSkills* Skill = CharacterSkillMap.Find(SkillName);
+	int32 ActiveSkillsCount = 0;
 	
-	if(Skill && Skill->bIsUnlocked)
+	for(const auto& SkillEntry : CharacterSkillMap)
 	{
-		Skill->bIsUnlocked = false;
-		OnSkillRetracted.Broadcast(SkillName);	// calls HandleSkillRetracted in PlayerCharacterBase
+		if(SkillEntry.Value.bIsActive)
+			ActiveSkillsCount++;
+	}
+	return ActiveSkillsCount;
+}
+
+void USkillTreeComponent::ActivateSkill(const FString& SkillName)
+{
+	if(GetNumActiveSkills() < 3)
+	{
+		FCharacterSkills* Skill = CharacterSkillMap.Find(SkillName);
+		if(!Skill->bIsActive && Skill->bIsUnlocked)
+		{
+			Skill->bIsActive = true;
+			OnSkillActivated.Broadcast(SkillName); // bound in base character constructor (data is saved)
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Too many skills active"));
 	}
 }
+
+void USkillTreeComponent::DeactivateSkill(const FString& SkillName)
+{
+	FCharacterSkills* Skill = CharacterSkillMap.Find(SkillName);
+	if(Skill->bIsActive && Skill->bIsUnlocked)
+	{
+		Skill->bIsActive = false;
+		OnSkillDeactivated.Broadcast(SkillName); // bound in base character constructor (data is saved)
+	}
+}
+
+
 
 
 /*

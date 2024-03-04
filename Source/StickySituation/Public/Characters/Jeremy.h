@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Characters/PlayerCharacterBase.h"
 #include "Components/Grapple/GrappleComponent.h"
-#include "GameEnums.h"
 #include "Jeremy.generated.h"
 
 UCLASS()
