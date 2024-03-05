@@ -15,40 +15,12 @@
 #include "Projectiles/BlueProjectile.h"
 #include "Projectiles/YellowProjectile.h"
 
-
 AJeremy::AJeremy()
 {
 	GrappleComponent = CreateDefaultSubobject<UGrappleComponent>(TEXT("Grapple"));
-
-	//	CHARACTER SKILL TREE //
-	FCharacterSkills MovementSpeedIncrease;
-	MovementSpeedIncrease.Name = TEXT("MovementSpeedIncrease");
-	MovementSpeedIncrease.Value = 0.5f;
-	MovementSpeedIncrease.Description = FString::Printf(TEXT("Movement speed increase by: %.2f"), MovementSpeedIncrease.Value);
-	
-	FCharacterSkills MaxHealthIncrease;
-	MaxHealthIncrease.Name = TEXT("MaxHealthIncrease");
-	MaxHealthIncrease.Value = 0.5f;
-	MaxHealthIncrease.Description = FString::Printf(TEXT("Max Health increase by: %.2f"), MaxHealthIncrease.Value);
-
-	FCharacterSkills MeleeDamageIncrease;
-	MeleeDamageIncrease.Name = TEXT("MeleeDamageIncrease");
-	MeleeDamageIncrease.Value = 0.15f;
-	MeleeDamageIncrease.Description = FString::Printf(TEXT("Melee damage increase by: %.2f"), MeleeDamageIncrease.Value);
-
-	FCharacterSkills ProjectileDamageIncrease;
-	ProjectileDamageIncrease.Name = TEXT("ProjectileDamageIncrease");
-	ProjectileDamageIncrease.Value = 0.15f;
-	ProjectileDamageIncrease.Description = FString::Printf(TEXT("Projectile damage increase by: %.2f"), ProjectileDamageIncrease.Value);
-
-	CharacterSkillTreeComponent->CharacterSkillMap.Add(MovementSpeedIncrease.Name, MovementSpeedIncrease);
-	CharacterSkillTreeComponent->CharacterSkillMap.Add(MaxHealthIncrease.Name, MaxHealthIncrease);
-	CharacterSkillTreeComponent->CharacterSkillMap.Add(MeleeDamageIncrease.Name, MeleeDamageIncrease);
-	CharacterSkillTreeComponent->CharacterSkillMap.Add(ProjectileDamageIncrease.Name, ProjectileDamageIncrease);
-
-	///////////////////////////////////////////////////////
 	
 	CharacterIdentifier = TEXT("Jeremy");	// for save slot
+	SkillsDataTablePath = TEXT("/Game/SkillTrees/JeremySkillTree");	// make skill tree if no save data
 }
 
 void AJeremy::BeginPlay()
@@ -64,9 +36,6 @@ void AJeremy::BeginPlay()
 			InputSubsystem->AddMappingContext(JeremyInputMappingContext, 1); // Priority can be adjusted as needed
 		}
 	}
-
-	ensure(GrappleComponent);
-	ensure(!ProjectileMap.Num() == 0);
 	
 	InitializeAmmo();
 }

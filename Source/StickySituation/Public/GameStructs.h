@@ -23,9 +23,9 @@ struct FProjectileData
 };
 
 USTRUCT(BlueprintType)
-struct FCharacterSkills
+struct FCharacterSkills : public FTableRowBase
 {
-	GENERATED_BODY()
+	GENERATED_USTRUCT_BODY()
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

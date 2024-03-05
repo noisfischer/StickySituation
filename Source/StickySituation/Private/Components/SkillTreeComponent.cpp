@@ -23,6 +23,11 @@ void USkillTreeComponent::UnlockSkill(const FString& SkillName)
 		Skill->bIsUnlocked = true;
 		OnSkillUnlocked.Broadcast(SkillName); // bound in base character constructor (data is saved)
 	}
+
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Unlock Failed"));
+	}
 }
 
 int32 USkillTreeComponent::GetNumActiveSkills() const
@@ -48,7 +53,7 @@ void USkillTreeComponent::ActivateSkill(const FString& SkillName)
 			OnSkillActivated.Broadcast(SkillName); // bound in base character constructor (data is saved)
 		}
 	}
-	else
+	else if(GetNumActiveSkills() >= 3)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Too many skills active"));
 	}

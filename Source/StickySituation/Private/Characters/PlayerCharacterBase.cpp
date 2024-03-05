@@ -17,6 +17,8 @@
 #include "Projectiles/GreenProjectile.h"
 #include "Projectiles/BlueProjectile.h"
 #include "Projectiles/YellowProjectile.h"
+#include "Misc/FileHelper.h"
+#include "HAL/PlatformFilemanager.h"
 
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -298,6 +300,14 @@ void APlayerCharacterBase::LoadCharacterSkills()
 			//UE_LOG(LogTemp, Warning, TEXT("Number of skills: %i"), ActiveSkills.Num());
 			InitializeUnlockedSkills();
 		}
+		else
+		{
+			UDataTable* DataTable = LoadObject<UDataTable>(nullptr, *SkillsDataTablePath);
+			if(DataTable)
+				InitializeCharacterSkillsFromDataTable(DataTable);
+			else
+				UE_LOG(LogTemp, Error, TEXT("Failed to load SkillTree DataTable."));
+		}
 	}
 }
 
@@ -310,4 +320,27 @@ void APlayerCharacterBase::InitializeUnlockedSkills()
 	}
 	
 	// OTHER LOGIC IN OVERRIDDEN FUNCTIONS IN DERIVED CLASSES
+}
+
+bool APlayerCharacterBase::InitializeCharacterSkillsFromDataTable(UDataTable* DataTable)
+{
+	if (!DataTable)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("DataTable is not valid."));
+		return false;
+	}
+
+	static const FString ContextString(TEXT("Character Skills Initialization"));
+	for (const auto& Row : DataTable->GetRowMap())
+	{
+		FCharacterSkills* SkillData = (FCharacterSkills*)Row.Value;
+
+		if (SkillData && CharacterSkillTreeComponent)
+		{
+			CharacterSkillTreeComponent->CharacterSkillMap.Add(SkillData->Name, *SkillData);
+		}
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Character skills have been initialized from DataTable."));
+	return true;
 }

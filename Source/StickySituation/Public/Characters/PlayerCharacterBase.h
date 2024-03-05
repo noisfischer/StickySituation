@@ -55,6 +55,8 @@ public:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Save")
 	FString CharacterIdentifier;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Save")
+	FString SkillsDataTablePath;
 	
 	// COMPONENT DECLARATIONS TO BE INITIALIZED IN CONSTRUCTOR //
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
@@ -143,6 +145,8 @@ public:
 	
 protected:
 	virtual float PlayAnimMontage(UAnimMontage* AnimMontage, float InPlayRate, FName StartSectionName) override;
+
+	bool InitializeCharacterSkillsFromDataTable(UDataTable* DataTable);
 	
 	void SpawnProjectile(float DamageMultiplier, float SpeedMultiplier);
 	
