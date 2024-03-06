@@ -206,7 +206,7 @@ void AJeremy::GrappleRefresh()
 
 void AJeremy::InitializeUnlockedSkills()
 {
-	Super::InitializeUnlockedSkills();	// If activeskills < 0, return
+	Super::InitializeUnlockedSkills();	// If ActiveSkills < 0, return
 
 	for(auto skill : ActiveSkills)
 	{

@@ -35,7 +35,7 @@ public:
 	FString Description;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Value;
+	float Value = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsUnlocked = false;
