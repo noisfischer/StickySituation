@@ -59,6 +59,8 @@ public:
 	FString CharacterIdentifier;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Save")
 	FString SkillsDataTablePath;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Save")
+	FString ProjectileDataTablePath;
 	
 	// COMPONENT DECLARATIONS TO BE INITIALIZED IN CONSTRUCTOR //
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
@@ -95,13 +97,12 @@ public:
 	float ProjectileDamageMultiplier = 1;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="DAMAGE")
 	float MeleeDamageMultiplier = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
+	FString CurrentAmmoName = TEXT("Red");
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
-	EAmmoType CurrentAmmoName = EAmmoType::Red;
-
-	// POPULATE THIS IN YOUR CHILD BPs! //
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
-	TMap<EAmmoType, FProjectileData> ProjectileMap;
+	TMap<FString, FProjectileData> ProjectileMap;
 	
 	// SOCKET NAMES FOR ATTACHMENT TO SKELETAL MESH //
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="3 - SOCKET NAMES")
@@ -149,6 +150,8 @@ protected:
 	virtual float PlayAnimMontage(UAnimMontage* AnimMontage, float InPlayRate, FName StartSectionName) override;
 
 	bool InitializeCharacterSkillsFromDataTable(UDataTable* DataTable);
+	
+	void LoadProjectileData();
 	
 	void SpawnProjectile(float DamageMultiplier, float SpeedMultiplier);
 	

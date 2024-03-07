@@ -81,6 +81,8 @@ APlayerCharacterBase::APlayerCharacterBase()
 	CharacterSkillTreeComponent->OnSkillUnlocked.AddDynamic(this, &APlayerCharacterBase::HandleSkillUnlocked);
 	CharacterSkillTreeComponent->OnSkillActivated.AddDynamic(this, &APlayerCharacterBase::HandleSkillActivated);
 	CharacterSkillTreeComponent->OnSkillDeactivated.AddDynamic(this, &APlayerCharacterBase::HandleSkillDeactivated);
+
+	ProjectileDataTablePath = TEXT("/Game/DataTables/ProjectileData");
 }
 
 
@@ -99,6 +101,7 @@ void APlayerCharacterBase::BeginPlay()
 	}
 
 	LoadCharacterSkills();
+	LoadProjectileData();
 
 	// MELEE ANIMATION SETUP //
 	MeleeWeapon_Collision->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacterBase::OnWeaponCollisionOverlap);
@@ -216,6 +219,7 @@ void APlayerCharacterBase::SpawnProjectile(float DamageMultiplier, float SpeedMu
 
 	TSubclassOf<AProjectileBase> SpawnProjectile = ProjectileMap.Find(CurrentAmmoName)->ProjectileClass;
 
+	
 	if(*SpawnProjectile)
 	{
 		AProjectileBase* Projectile = GetWorld()->SpawnActor<AProjectileBase>
@@ -225,11 +229,10 @@ void APlayerCharacterBase::SpawnProjectile(float DamageMultiplier, float SpeedMu
 			SpawnRotation,
 			SpawnParams
 			);
-
+		
 		Projectile->SetCurrentSpeed(ProjectileMap.Find(CurrentAmmoName)->Speed * SpeedMultiplier);
 		Projectile->SetDamage(ProjectileMap.Find(CurrentAmmoName)->Damage * DamageMultiplier);
-		
-		DECREMENT_AMMO(CurrentAmmoName);	// in GameMacros.h
+		ProjectileMap.Find(CurrentAmmoName)->AmmoCount--;
 	}
 }
 
@@ -360,4 +363,30 @@ bool APlayerCharacterBase::InitializeCharacterSkillsFromDataTable(UDataTable* Da
 
 	UE_LOG(LogTemp, Warning, TEXT("Character skills have been initialized from DataTable."));
 	return true;
+}
+
+void APlayerCharacterBase::LoadProjectileData()
+{
+	UDataTable* DataTable = LoadObject<UDataTable>(nullptr, *ProjectileDataTablePath);
+	if (!DataTable)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Projectile DataTable not found."));
+		return;
+	}
+
+	static const FString ContextString(TEXT("Projectile Data Loading"));
+	ProjectileMap.Empty();
+	for (const auto& Row : DataTable->GetRowMap())
+	{
+		FName RowName = Row.Key;
+		FProjectileData* RowData = (FProjectileData*)Row.Value;
+
+		if (RowData)
+		{
+			FString RowNameStr = RowName.ToString();
+			ProjectileMap.Add(RowNameStr, *RowData);
+		}
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Projectile data loaded successfully."));
 }

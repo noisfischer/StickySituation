@@ -31,5 +31,6 @@ do { \
 	} \
 } while (0)
 
+
 #define GET_SKILL_VALUE(SkillName) \
 	(CharacterSkillTreeComponent->CharacterSkillMap.Find(SkillName) ? CharacterSkillTreeComponent->CharacterSkillMap.Find(SkillName)->Value : 0)

@@ -5,9 +5,12 @@
 #include "GameStructs.generated.h"
 
 USTRUCT(BlueprintType)
-struct FProjectileData
+struct FProjectileData : public FTableRowBase
 {
-	GENERATED_BODY()
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString Name;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<AProjectileBase> ProjectileClass = nullptr;

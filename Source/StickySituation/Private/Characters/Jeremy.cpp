@@ -20,7 +20,7 @@ AJeremy::AJeremy()
 	GrappleComponent = CreateDefaultSubobject<UGrappleComponent>(TEXT("Grapple"));
 	
 	CharacterIdentifier = TEXT("Jeremy");	// for save slot
-	SkillsDataTablePath = TEXT("/Game/SkillTrees/JeremySkillTree");	// make skill tree if no save data
+	SkillsDataTablePath = TEXT("/Game/DataTables/JeremySkillTree");	// make skill tree if no save data
 }
 
 void AJeremy::BeginPlay()
@@ -65,8 +65,7 @@ void AJeremy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AJeremy::InitializeAmmo()
 {
-	// check if any upgrades/skills equipped
-		// i.e. ProjectileMap.Find(EAmmoType::Red)->Damage += 1;
+	// Make any changes here like increasing ammo count, etc.
 }
 
 void AJeremy::Melee()
@@ -148,32 +147,31 @@ void AJeremy::FireSlingshot()
 
 void AJeremy::EquipAmmoSlot1()
 {
-	if(CurrentAmmoName != EAmmoType::Red && !bCharging)
-		CurrentAmmoName = EAmmoType::Red;
+	if(CurrentAmmoName != ProjectileMap.Find("Red")->Name)
+		CurrentAmmoName = ProjectileMap.Find("Red")->Name;
 }
 
 void AJeremy::EquipAmmoSlot2()
 {
-	if(CurrentAmmoName != EAmmoType::Green && !bCharging)
-		CurrentAmmoName = EAmmoType::Green;
+	if(CurrentAmmoName != ProjectileMap.Find("Green")->Name)
+		CurrentAmmoName = ProjectileMap.Find("Green")->Name;
 }
 
 void AJeremy::EquipAmmoSlot3()
 {
-	if(CurrentAmmoName != EAmmoType::Blue && !bCharging)
-		CurrentAmmoName = EAmmoType::Blue;
+	if(CurrentAmmoName != ProjectileMap.Find("Blue")->Name)
+		CurrentAmmoName = ProjectileMap.Find("Blue")->Name;
 }
 
 void AJeremy::EquipAmmoSlot4()
 {
-	if(CurrentAmmoName != EAmmoType::Yellow && !bCharging)
-		CurrentAmmoName = EAmmoType::Yellow;
+	if(CurrentAmmoName != ProjectileMap.Find("Yellow")->Name)
+		CurrentAmmoName = ProjectileMap.Find("Yellow")->Name;
 }
 
 
 void AJeremy::Grapple()
 {
-
 	check(GrappleComponent);
 	
 	if(GrappleComponent && bGrappleAvailable)
