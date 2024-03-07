@@ -42,6 +42,8 @@ class APlayerCharacterBase : public ACharacter, public ICharacterInterface
 	UInputAction* MoveAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* InteractAction;
 
 	
 public:
@@ -155,6 +157,9 @@ protected:
 	// ENHANCED INPUT FUNCTION BINDINGS
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
+
+	UFUNCTION()
+	virtual void OnInteractActionTriggered();
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void BeginPlay() override;

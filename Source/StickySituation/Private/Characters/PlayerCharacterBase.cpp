@@ -122,6 +122,10 @@ void APlayerCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacterBase::Look);
+
+		// Interact
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &APlayerCharacterBase::OnInteractActionTriggered);
+
 	}
 	else
 	{
@@ -163,6 +167,11 @@ void APlayerCharacterBase::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void APlayerCharacterBase::OnInteractActionTriggered()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Interact action triggered"));
 }
 
 // INTERFACE EVENTS //
@@ -308,6 +317,14 @@ void APlayerCharacterBase::LoadCharacterSkills()
 			else
 				UE_LOG(LogTemp, Error, TEXT("Failed to load SkillTree DataTable."));
 		}
+	}
+	else
+	{
+		UDataTable* DataTable = LoadObject<UDataTable>(nullptr, *SkillsDataTablePath);
+		if(DataTable)
+			InitializeCharacterSkillsFromDataTable(DataTable);
+		else
+			UE_LOG(LogTemp, Error, TEXT("Failed to load SkillTree DataTable."));
 	}
 }
 

@@ -6,6 +6,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Components/TimelineComponent.h"
 #include "SkillTreeHub.generated.h"
 
 UCLASS()
@@ -16,8 +17,11 @@ class STICKYSITUATION_API ASkillTreeHub : public AActor
 public:	
 	ASkillTreeHub();
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* InteractAction;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Mesh)
-	UStaticMeshComponent* Mesh;
+	USceneComponent* SceneComponent;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Mesh)
 	USphereComponent* SphereCollision;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Mesh)
@@ -26,7 +30,7 @@ public:
 	UWidgetComponent* SkillTreeMenu;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="MenuView")
-	FTransform CameraTransform;
+	FTransform NewCameraTransform;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="MenuView")
 	FTransform OriginalCameraTransform;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="MenuView")
@@ -34,13 +38,32 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="MenuView")
 	TSubclassOf<UUserWidget> JeremySkillTree;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="MenuView")
+    TSubclassOf<UUserWidget> AmySkillTree;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="MenuView")
+    TSubclassOf<UUserWidget> ClaySkillTree;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Player")
-	ACharacter* PlayerRef = nullptr;
+	APlayerCharacterBase* PlayerRef = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category="Timeline")
+	FTimeline CameraTransitionTimeline;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Timeline")
+	UCurveFloat* TimelineCurve;
+	
+	UFUNCTION()
+	void TimelineProgress(float Alpha);
+	UFUNCTION()
+	void TimelineFinished();
+	
+	bool bCameraTransitionActive = false;
+	bool bHubInUse = false;
+	bool bHubAvailable = false;
 
 protected:
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent,
 		AActor* OtherActor,
 		UPrimitiveComponent* OtherComp,
@@ -48,14 +71,20 @@ protected:
 		bool bSweep,
 		const FHitResult& SweepResult
 		);
-
+	
+	UFUNCTION()
 	void OnEndOverlap(UPrimitiveComponent* OverlappedComponent,
 		AActor* OtherActor,
 		UPrimitiveComponent* OtherComp,
 		int BodyIndex
 		);
 
+	UFUNCTION(BlueprintCallable)
+	void InputToInteract();
 
-//	virtual void Tick(float DeltaTime) override;
+	UFUNCTION()
+	void BindInteractionInput();
+
+	virtual void Tick(float DeltaTime) override;
 
 };
