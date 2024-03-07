@@ -29,8 +29,6 @@ ASkillTreeHub::ASkillTreeHub()
 void ASkillTreeHub::BeginPlay()
 {
 	Super::BeginPlay();
-
-	BindInteractionInput();
 	
 	if(TimelineCurve)
 	{
@@ -46,24 +44,8 @@ void ASkillTreeHub::BeginPlay()
 	}
 
 	PlayerRef = Cast<APlayerCharacterBase>(UGameplayStatics::GetPlayerCharacter(this, 0));
-	
 	ensure(PlayerRef);
-	
-	if(PlayerRef->IsA(AJeremy::StaticClass()) && JeremySkillTree)
-		SkillTreeMenu->SetWidgetClass(JeremySkillTree);
-	else
-		UE_LOG(LogTemp, Warning, TEXT("Set value for JeremySkillTree"));
-
-	/* FOR THE OTHER CHARACTERS, WHEN IMPLEMENTED
-	if(PlayerRef->IsA(AAmy::StaticClass()) && AmySkillTree)
-    		SkillTreeMenu->SetWidgetClass(AmySkillTree);
-    	else
-    		UE_LOG(LogTemp, Warning, TEXT("Set value for AmySkillTree"));
-    if(PlayerRef->IsA(AClay::StaticClass()) && ClaySkillTree)
-        		SkillTreeMenu->SetWidgetClass(ClaySkillTree);
-        	else
-        		UE_LOG(LogTemp, Warning, TEXT("Set value for ClaySkillTree"));
-    */
+	BindInteractionInput();
 
 	NewCameraTransform = Camera->GetComponentTransform();
 }
@@ -80,7 +62,12 @@ void ASkillTreeHub::Tick(float DeltaTime)
 void ASkillTreeHub::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int BodyIndex, bool bSweep, const FHitResult& SweepResult)
 {
 	if(OtherActor == PlayerRef)
+	{
 		bHubAvailable = true;
+
+		if(SkillTreeMenu->GetWidgetClass() == nullptr)
+			SetSkillMenu();
+	}
 }
 
 void ASkillTreeHub::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int BodyIndex)
@@ -157,4 +144,29 @@ void ASkillTreeHub::BindInteractionInput()
 			UE_LOG(LogTemp, Warning, TEXT("Provide a mapping for IA_Interact"));
 		}
 	}
+}
+
+void ASkillTreeHub::RemoveWidgetClass()
+{
+	// Called in individual widget BPs so if character changes, correct widget will be constructed
+	SkillTreeMenu->SetWidgetClass(nullptr);
+}
+
+void ASkillTreeHub::SetSkillMenu()
+{
+	if(PlayerRef->IsA(AJeremy::StaticClass()) && JeremySkillTree)
+		SkillTreeMenu->SetWidgetClass(JeremySkillTree);
+	else
+		UE_LOG(LogTemp, Warning, TEXT("Set value for JeremySkillTree"));
+
+	/* FOR THE OTHER CHARACTERS, WHEN IMPLEMENTED
+	if(PlayerRef->IsA(AAmy::StaticClass()) && AmySkillTree)
+			SkillTreeMenu->SetWidgetClass(AmySkillTree);
+		else
+			UE_LOG(LogTemp, Warning, TEXT("Set value for AmySkillTree"));
+	if(PlayerRef->IsA(AClay::StaticClass()) && ClaySkillTree)
+				SkillTreeMenu->SetWidgetClass(ClaySkillTree);
+			else
+				UE_LOG(LogTemp, Warning, TEXT("Set value for ClaySkillTree"));
+	*/
 }

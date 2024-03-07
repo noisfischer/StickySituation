@@ -35,7 +35,7 @@ public:
 	FTransform OriginalCameraTransform;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="MenuView")
 	FTransform WidgetTransform;
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="MenuView")
 	TSubclassOf<UUserWidget> JeremySkillTree;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="MenuView")
@@ -84,6 +84,11 @@ protected:
 
 	UFUNCTION()
 	void BindInteractionInput();
+
+	UFUNCTION(BlueprintCallable)
+	void RemoveWidgetClass();
+
+	void SetSkillMenu();
 
 	virtual void Tick(float DeltaTime) override;
 
