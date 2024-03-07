@@ -91,17 +91,22 @@ void ASkillTreeHub::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 
 void ASkillTreeHub::InputToInteract()
 {
+	if(PlayerRef->GetCharacterMovement()->IsFalling())
+		return;
+	
 	if(!bHubInUse && bHubAvailable)
 	{
-		CameraTransitionTimeline.Play();
-		bCameraTransitionActive = true;
-		OriginalCameraTransform = PlayerRef->FollowCamera->GetComponentTransform();
-
+		PlayerRef->GetCharacterMovement()->StopMovementImmediately();	// Prevents cam misplacement
 		PlayerRef->GetController()->SetIgnoreMoveInput(true);
 		PlayerRef->GetController()->SetIgnoreLookInput(true);
 		
 		FInputModeUIOnly CurrentInputMode;
 		UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(CurrentInputMode);
+
+		OriginalCameraTransform = PlayerRef->FollowCamera->GetComponentTransform();
+		
+		CameraTransitionTimeline.Play();
+		bCameraTransitionActive = true;
 	}
 	else if(bHubInUse && bHubAvailable)
 	{
