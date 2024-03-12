@@ -19,4 +19,13 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category="Character")
 	TMap<FString, FCharacterSkills> SavedSkillTreeState;
+
+	UPROPERTY(VisibleAnywhere, Category = "Character")
+	float CharacterXP;
+
+	UPROPERTY(VisibleAnywhere, Category = "Character")
+	float CharacterLevel;
+
+	UPROPERTY(VisibleAnywhere, Category = "Character")
+	float Currency;
 };

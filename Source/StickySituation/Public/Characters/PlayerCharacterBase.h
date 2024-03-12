@@ -50,10 +50,10 @@ public:
 	// CONSTRUCTOR DECLARATION //
 	APlayerCharacterBase();
 	
-	UFUNCTION()
-	virtual void SaveCharacterSkills();
-	UFUNCTION()
-	virtual void LoadCharacterSkills();
+	UFUNCTION(BlueprintCallable)
+	virtual void SaveCharacterData();
+	UFUNCTION(BlueprintCallable)
+	virtual void LoadCharacterData();
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Save")
 	FString CharacterIdentifier;
@@ -93,10 +93,19 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="1 - HEALTH")
 	bool Dead = false;
 
+	// PROJECTILE MULTIPLIERS //
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="DAMAGE")
 	float ProjectileDamageMultiplier = 1;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="DAMAGE")
 	float MeleeDamageMultiplier = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="XP")
+	float CharacterXP = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="XP")
+	float CharacterLevel = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Currency")
+	float Currency = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2 - AMMO")
 	FString CurrentAmmoName = TEXT("Red");
@@ -150,6 +159,11 @@ protected:
 	virtual float PlayAnimMontage(UAnimMontage* AnimMontage, float InPlayRate, FName StartSectionName) override;
 
 	bool InitializeCharacterSkillsFromDataTable(UDataTable* DataTable);
+
+	UFUNCTION(BlueprintCallable)
+	void SaveCurrency();
+	UFUNCTION(BlueprintCallable)
+	void LoadCurrency();
 	
 	void LoadProjectileData();
 	

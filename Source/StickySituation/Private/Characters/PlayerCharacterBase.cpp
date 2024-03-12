@@ -100,7 +100,8 @@ void APlayerCharacterBase::BeginPlay()
 		}
 	}
 
-	LoadCharacterSkills();
+	LoadCharacterData();
+	LoadCurrency();
 	LoadProjectileData();
 
 	// MELEE ANIMATION SETUP //
@@ -274,43 +275,54 @@ void APlayerCharacterBase::PlaySound(USoundBase* Sound)
 
 void APlayerCharacterBase::HandleSkillUnlocked(FString SkillName)
 {
-	SaveCharacterSkills();	// saves current CharacterSkillMap values (unlocked)
+	SaveCharacterData();	// saves current CharacterSkillMap values (unlocked)
 }
 
 void APlayerCharacterBase::HandleSkillActivated(FString SkillName)
 {
 	ActiveSkills.Add(SkillName);
-	SaveCharacterSkills();
+	SaveCharacterData();
 	UE_LOG(LogTemp, Warning, TEXT("Skill activated: %s"), *SkillName);
 }
 
 void APlayerCharacterBase::HandleSkillDeactivated(FString SkillName)
 {
 	ActiveSkills.Remove(SkillName);
-	SaveCharacterSkills();
+	SaveCharacterData();
 	UE_LOG(LogTemp, Warning, TEXT("Skill deactivated: %s"), *SkillName);
 }
 
-void APlayerCharacterBase::SaveCharacterSkills()
+void APlayerCharacterBase::SaveCharacterData()
 {
 	USaveCharacterData* SaveGameInstance = Cast<USaveCharacterData>(UGameplayStatics::CreateSaveGameObject(USaveCharacterData::StaticClass()));
+
+	// SAVE CURRENT SKILL DATA //
 	SaveGameInstance->SavedSkills = ActiveSkills;
 	SaveGameInstance->SavedSkillTreeState = CharacterSkillTreeComponent->CharacterSkillMap;
+
+	// SAVE CURRENT XP & LEVEL DATA //
+	SaveGameInstance->CharacterLevel = this->CharacterLevel;
+	SaveGameInstance->CharacterXP = this->CharacterXP;
+	
 	UGameplayStatics::SaveGameToSlot(SaveGameInstance, CharacterIdentifier, 0);
-	UE_LOG(LogTemp, Warning, TEXT("Saved"));
+	UE_LOG(LogTemp, Warning, TEXT("Saved Character Data"));
 }
 
-void APlayerCharacterBase::LoadCharacterSkills()
+void APlayerCharacterBase::LoadCharacterData()
 {
 	if (UGameplayStatics::DoesSaveGameExist(CharacterIdentifier, 0))
 	{
 		USaveCharacterData* LoadGameInstance = Cast<USaveCharacterData>(UGameplayStatics::LoadGameFromSlot(CharacterIdentifier, 0));
 		if (LoadGameInstance != nullptr)
 		{
+			// LOAD & INIT CHARACTER SKILL INFORMATION //
 			ActiveSkills = LoadGameInstance->SavedSkills;
 			CharacterSkillTreeComponent->CharacterSkillMap = LoadGameInstance->SavedSkillTreeState;
-			//UE_LOG(LogTemp, Warning, TEXT("Number of skills: %i"), ActiveSkills.Num());
 			InitializeUnlockedSkills();
+
+			// LOAD CHARACTER XP AND LEVEL DATA //
+			CharacterLevel = LoadGameInstance->CharacterLevel;
+			CharacterXP = LoadGameInstance->CharacterXP;
 		}
 		else
 		{
@@ -329,6 +341,9 @@ void APlayerCharacterBase::LoadCharacterSkills()
 		else
 			UE_LOG(LogTemp, Error, TEXT("Failed to load SkillTree DataTable."));
 	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Current Level: %f"), CharacterLevel);
+	UE_LOG(LogTemp, Warning, TEXT("Current XP: %f"), CharacterXP);
 }
 
 void APlayerCharacterBase::InitializeUnlockedSkills()
@@ -363,6 +378,28 @@ bool APlayerCharacterBase::InitializeCharacterSkillsFromDataTable(UDataTable* Da
 
 	UE_LOG(LogTemp, Warning, TEXT("Character skills have been initialized from DataTable."));
 	return true;
+}
+
+void APlayerCharacterBase::SaveCurrency()
+{
+	USaveCharacterData* SaveGameInstance = Cast<USaveCharacterData>(UGameplayStatics::CreateSaveGameObject(USaveCharacterData::StaticClass()));
+	
+	SaveGameInstance->Currency = this->Currency;
+	
+	UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("PlayerCurrency"), 0);
+	UE_LOG(LogTemp, Warning, TEXT("Saved Currency Data"));
+}
+
+void APlayerCharacterBase::LoadCurrency()
+{
+	if (UGameplayStatics::DoesSaveGameExist(TEXT("PlayerCurrency"), 0))
+	{
+		USaveCharacterData* LoadGameInstance = Cast<USaveCharacterData>(UGameplayStatics::LoadGameFromSlot(TEXT("PlayerCurrency"), 0));
+		if (LoadGameInstance != nullptr)
+			Currency = LoadGameInstance->Currency;
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Currency: %f"), Currency);
 }
 
 void APlayerCharacterBase::LoadProjectileData()
