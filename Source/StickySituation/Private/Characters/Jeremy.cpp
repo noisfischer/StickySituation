@@ -228,6 +228,11 @@ void AJeremy::InitializeUnlockedSkills()
 		{
 			ProjectileDamageMultiplier += ProjectileDamageMultiplier * GET_SKILL_VALUE(skill);
 			UE_LOG(LogTemp, Warning, TEXT("Projectile Damage Multiplier: %f"), ProjectileDamageMultiplier);
-		}	
+		}
+		else if (skill == "StunTimeIncrease")
+		{
+			StunTimeMultiplier = GET_SKILL_VALUE(skill);
+			UE_LOG(LogTemp, Warning, TEXT("Stun Time Multiplier: %f"), StunTimeMultiplier);
+		}
 	}
 }

@@ -98,6 +98,8 @@ public:
 	float ProjectileDamageMultiplier = 1;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="DAMAGE")
 	float MeleeDamageMultiplier = 1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="DAMAGE")
+	float StunTimeMultiplier = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="XP")
 	float CharacterXP = 0;

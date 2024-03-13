@@ -24,4 +24,6 @@ void ABlueProjectile::RadialBlastAction(AActor* Enemy)
 {
 	Super::RadialBlastAction(Enemy);
 	Execute_StunEnemy(Enemy, StunTime);	// have player affect StunTime if skill/upgrade equipped
+
+	UE_LOG(LogTemp, Warning, TEXT("Stun Time: %f"), StunTime);
 }

@@ -233,6 +233,8 @@ void APlayerCharacterBase::SpawnProjectile(float DamageMultiplier, float SpeedMu
 		
 		Projectile->SetCurrentSpeed(ProjectileMap.Find(CurrentAmmoName)->Speed * SpeedMultiplier);
 		Projectile->SetDamage(ProjectileMap.Find(CurrentAmmoName)->Damage * DamageMultiplier);
+		if(Projectile->IsA(ABlueProjectile::StaticClass()))
+			Projectile->StunTime += Projectile->StunTime * StunTimeMultiplier;
 		ProjectileMap.Find(CurrentAmmoName)->AmmoCount--;
 	}
 }

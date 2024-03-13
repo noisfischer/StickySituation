@@ -37,10 +37,13 @@ public:
 	USoundBase* DestroyedSound;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="1 - DAMAGE")
-	float Damage = 1;
+	float Damage = 1.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="1 - DAMAGE")
 	float BlastRadius = 250.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="StunProperties")
+	float StunTime = 5.0f;
 
 	UFUNCTION()
 	virtual void PerformRadialBlast(float Radius);
