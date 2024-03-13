@@ -80,14 +80,10 @@ void AJeremy::Melee()
 void AJeremy::OnWeaponCollisionOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	//Super::OnWeaponCollisionOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+	Super::OnWeaponCollisionOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 
 	if(OtherActor->ActorHasTag("enemy"))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("OVERLAP"));
 		Execute_DamageEnemy(OtherActor, MeleeDamage);
-	}
-		
 }
 
 
