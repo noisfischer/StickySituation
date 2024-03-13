@@ -5,7 +5,6 @@
 
 ABlueProjectile::ABlueProjectile()
 {
-	//
 }
 
 void ABlueProjectile::BeginPlay()
@@ -24,5 +23,5 @@ void ABlueProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* HitActor,
 void ABlueProjectile::RadialBlastAction(AActor* Enemy)
 {
 	Super::RadialBlastAction(Enemy);
-	Execute_StunEnemy(Enemy, 5.0f);
+	Execute_StunEnemy(Enemy, StunTime);	// have player affect StunTime if skill/upgrade equipped
 }

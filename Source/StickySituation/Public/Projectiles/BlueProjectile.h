@@ -17,6 +17,9 @@ class STICKYSITUATION_API ABlueProjectile : public AProjectileBase
 public:
 	ABlueProjectile();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="StunProperties")
+	float StunTime = 5.0f;
+
 private:
 	virtual void BeginPlay() override;
 	virtual void OnHit(UPrimitiveComponent* HitComponent, AActor* HitActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) override;
