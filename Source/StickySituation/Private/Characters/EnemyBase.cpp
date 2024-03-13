@@ -3,21 +3,21 @@
 
 #include "Characters/EnemyBase.h"
 
+#include "GameFramework/CharacterMovementComponent.h"
+
 // Sets default values
 AEnemyBase::AEnemyBase()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	Tags.Add("enemy");
 }
 
-// Called when the game starts or when spawned
 void AEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
-// Called every frame
 void AEnemyBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -31,6 +31,24 @@ void AEnemyBase::DamageEnemy_Implementation(float Damage)
 	UE_LOG(LogTemp, Warning, TEXT("Enemy Current Health: %f"), CurrentHealth);
 }
 
+void AEnemyBase::AcidDamage_Implementation(float Damage)
+{
+	CurrentHealth -= Damage;
+	UE_LOG(LogTemp, Warning, TEXT("Enemy Current Health: %f"), CurrentHealth);
+}
+
+void AEnemyBase::StunEnemy_Implementation(float StunTime)
+{
+	GetCharacterMovement()->SetMovementMode(MOVE_None);
+	GetWorld()->GetTimerManager().SetTimer(StunTimer, this, &AEnemyBase::StunFinished, StunTime, false);
+	UE_LOG(LogTemp, Warning, TEXT("Enemy Stunned"));
+}
+
+void AEnemyBase::StunFinished()
+{
+	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+	UE_LOG(LogTemp, Warning, TEXT("Enemy Un-Stunned"));
+}
 
 
 /*void AEnemyBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

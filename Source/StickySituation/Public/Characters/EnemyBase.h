@@ -30,6 +30,15 @@ public:
 	// INTERFACE EVENTS //
 	UFUNCTION()
 	virtual void DamageEnemy_Implementation(float Damage) override;
+	UFUNCTION()
+	virtual void AcidDamage_Implementation(float Damage) override;
+	UFUNCTION()
+	virtual void StunEnemy_Implementation(float StunTime) override;
+	
+	UFUNCTION()
+	virtual void StunFinished();
+	
+	FTimerHandle StunTimer;
 
 protected:
 	// Called when the game starts or when spawned

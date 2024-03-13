@@ -24,5 +24,5 @@ void ABlueProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* HitActor,
 void ABlueProjectile::RadialBlastAction(AActor* Enemy)
 {
 	Super::RadialBlastAction(Enemy);
-	Execute_StunEnemy(Enemy);
+	Execute_StunEnemy(Enemy, 5.0f);
 }
