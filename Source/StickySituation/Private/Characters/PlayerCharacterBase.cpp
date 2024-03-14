@@ -255,8 +255,6 @@ void APlayerCharacterBase::SpawnProjectile(float DamageMultiplier, float SpeedMu
 	}
 }
 
-
-
 float APlayerCharacterBase::PlayAnimMontage(UAnimMontage* AnimMontage, float InPlayRate, FName StartSectionName)
 {
 	float MontageLength = 0.f;
@@ -271,8 +269,6 @@ void APlayerCharacterBase::OnMontageFinished(UAnimMontage* Montage, bool bMontag
 {
 	bAttacking = false;
 }
-
-
 
 void APlayerCharacterBase::PlaySound(USoundBase* Sound)
 {

@@ -30,8 +30,5 @@ public:
 	void DamageEnemy(float Damage);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void AcidDamage(float Damage);
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void StunEnemy(float StunTime);
 };

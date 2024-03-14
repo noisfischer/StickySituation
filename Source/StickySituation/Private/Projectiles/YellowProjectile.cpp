@@ -22,7 +22,6 @@ void AYellowProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* HitActo
 	Super::OnHit(HitComponent, HitActor, OtherComp, NormalImpulse, Hit);
 
 	ProjectileMesh->SetVisibility(false);
-	
 	SphereCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	
 	GetWorld()->GetTimerManager().SetTimer(
@@ -41,7 +40,6 @@ void AYellowProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* HitActo
 		);
 }
 
-
 void AYellowProjectile::EndAcidTimer()
 {
 	AcidDurationTimer.Invalidate();
@@ -52,17 +50,15 @@ void AYellowProjectile::EndAcidTimer()
 
 void AYellowProjectile::ApplyAcidDamage()
 {
-	// REMOVE DEAD ENEMIES FROM ARRAY //
+	// REMOVE ENEMIES FROM ARRAY IF DEAD //
 	for(int32 i = AffectedEnemies.Num() - 1; i >= 0; --i)
 	{
 		if (!AffectedEnemies[i])
 			AffectedEnemies.RemoveAt(i);
 	}
-		
-	// DAMAGE ENEMIES //
-	for(auto enemy : AffectedEnemies)
-		Execute_AcidDamage(enemy, AcidDamageAmount);
 	
+	for(auto enemy : AffectedEnemies)
+		Execute_DamageEnemy(enemy, AcidDamageAmount);
 }
 
 void AYellowProjectile::AcidBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -84,5 +80,3 @@ void AYellowProjectile::AcidEndOverlap(UPrimitiveComponent* OverlappedComponent,
 		UE_LOG(LogTemp, Warning, TEXT("Enemies Overlapped: %i"), AffectedEnemies.Num());
 	}
 }
-
-

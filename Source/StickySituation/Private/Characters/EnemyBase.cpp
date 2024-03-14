@@ -31,12 +31,6 @@ void AEnemyBase::DamageEnemy_Implementation(float Damage)
 	UE_LOG(LogTemp, Warning, TEXT("Enemy Current Health: %f"), CurrentHealth);
 }
 
-void AEnemyBase::AcidDamage_Implementation(float Damage)
-{
-	CurrentHealth -= Damage;
-	UE_LOG(LogTemp, Warning, TEXT("Enemy Current Health: %f"), CurrentHealth);
-}
-
 void AEnemyBase::StunEnemy_Implementation(float StunTime)
 {
 	GetCharacterMovement()->SetMovementMode(MOVE_None);
