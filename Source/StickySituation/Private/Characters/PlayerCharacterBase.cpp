@@ -210,13 +210,13 @@ void APlayerCharacterBase::OnWeaponCollisionOverlap(UPrimitiveComponent* Overlap
 	{
 		UE_LOG(LogTemp, Warning, TEXT("OVERLAP"));
 		
-		int32 RandomInt = FMath::RandRange(0, 3);
-		if(RandomInt == 0)
+		float RandomNum = FMath::RandRange(0, 1);
+		if(RandomNum <= StunChance)		// Default 20% chance (no skill active)
 		{
-			StunTime += StunTime * StunTimeMultiplier;
-			Execute_StunEnemy(OtherActor, StunTime);
+			Execute_StunEnemy(OtherActor, StunTime);	// Default 5 seconds (no skill active)
 			UE_LOG(LogTemp, Warning, TEXT("Stun Time: %f"), StunTime);
 		}
+		UE_LOG(LogTemp, Warning, TEXT("Stun Chance: %f"), StunChance);
 	}
 }
 
@@ -246,7 +246,11 @@ void APlayerCharacterBase::SpawnProjectile(float DamageMultiplier, float SpeedMu
 		Projectile->SetCurrentSpeed(ProjectileMap.Find(CurrentAmmoName)->Speed * SpeedMultiplier);
 		Projectile->SetDamage(ProjectileMap.Find(CurrentAmmoName)->Damage * DamageMultiplier);
 		if(Projectile->IsA(ABlueProjectile::StaticClass()))
+		{
 			Projectile->StunTime += Projectile->StunTime * StunTimeMultiplier;
+			Projectile->StunChance += Projectile->StunChance * StunChanceMultiplier;
+		}
+		
 		ProjectileMap.Find(CurrentAmmoName)->AmmoCount--;
 	}
 }

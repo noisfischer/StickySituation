@@ -44,6 +44,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="StunProperties")
 	float StunTime = 5.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="STUN")
+	float StunChance = 0.5f;
 
 	UFUNCTION()
 	virtual void PerformRadialBlast(float Radius);

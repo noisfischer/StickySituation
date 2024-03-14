@@ -103,6 +103,10 @@ public:
 	float StunTime = 3.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="STUN")
 	float StunTimeMultiplier = 0.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="STUN")
+	float StunChance = 0.2f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="STUN")
+	float StunChanceMultiplier = 0.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="XP")
 	float CharacterXP = 0;

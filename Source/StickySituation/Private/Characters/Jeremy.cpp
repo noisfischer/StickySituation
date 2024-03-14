@@ -228,7 +228,14 @@ void AJeremy::InitializeUnlockedSkills()
 		else if (skill == "StunTimeIncrease")
 		{
 			StunTimeMultiplier = GET_SKILL_VALUE(skill);
+			StunTime += StunTime * StunTimeMultiplier;
 			UE_LOG(LogTemp, Warning, TEXT("Stun Time Multiplier: %f"), StunTimeMultiplier);
+		}
+		else if (skill == "StunChanceIncrease")
+		{
+			StunChanceMultiplier = GET_SKILL_VALUE(skill);
+			StunChance += StunChance * StunChanceMultiplier;
+			UE_LOG(LogTemp, Warning, TEXT("Stun Chance: %f"), StunChance);
 		}
 	}
 }

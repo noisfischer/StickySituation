@@ -23,7 +23,11 @@ void ABlueProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* HitActor,
 void ABlueProjectile::RadialBlastAction(AActor* Enemy)
 {
 	Super::RadialBlastAction(Enemy);
-	Execute_StunEnemy(Enemy, StunTime);	// have player affect StunTime if skill/upgrade equipped
 
+	float RandomNum = FMath::RandRange(0, 1);
+	if(RandomNum <= StunChance)		// Default 50% chance (no skill active)
+		Execute_StunEnemy(Enemy, StunTime);
+
+	UE_LOG(LogTemp, Warning, TEXT("Stun Chance: %f"), StunChance);
 	UE_LOG(LogTemp, Warning, TEXT("Stun Time: %f"), StunTime);
 }
