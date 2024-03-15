@@ -11,6 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "GameMacros.h"
 #include "InputActionValue.h"
+#include "NiagaraFunctionLibrary.h"
 #include "SPinValueInspector.h"
 #include "Kismet/GameplayStatics.h"
 #include "Projectiles/RedProjectile.h"
@@ -175,8 +176,88 @@ void APlayerCharacterBase::Look(const FInputActionValue& Value)
 
 void APlayerCharacterBase::OnInteractActionTriggered()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Interact action triggered"));
+	if(CollectAmmoMontage != nullptr)
+		PlayAnimMontage(CollectAmmoMontage, 1.f, "None");
 }
+
+void APlayerCharacterBase::CollectAmmo()
+{
+	TArray<FHitResult> HitResults;
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(this);
+	FVector Location = GetActorLocation() + GetActorForwardVector() * 75;
+	float Radius = 50.f;
+
+	GetWorld()->SweepMultiByChannel(
+		HitResults,
+		Location,
+		Location,
+		FQuat::Identity,
+		ECC_Pawn,
+		FCollisionShape::MakeSphere(Radius),
+		QueryParams
+		);
+
+	DrawDebugSphere(
+		GetWorld(),
+		Location,
+		Radius,
+		50,
+		FColor::Red,
+		false,
+		1.f,
+		0
+		);
+
+	for(auto Hit : HitResults)
+	{
+		if(Hit.GetActor()->ActorHasTag("stunned"))
+		{
+			// SPAWN NIAGARA SYSTEM //
+			/*UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+			this,
+			ParticleSystem,
+			Hit.ImpactPoint,
+			Hit.ImpactNormal.Rotation()
+			);*/
+
+			// SPAWN SOUND //
+			/*UGameplayStatics::PlaySoundAtLocation(
+				GetWorld(),
+				CollectAmmoSound,
+				Hit.Location,
+				Hit.GetActor()->GetActorRotation(),
+				1.f,
+				1.f,
+				0.f,
+				nullptr,
+				nullptr,
+				nullptr,
+				nullptr
+				);*/
+
+			FName EnemyColorTag = Hit.GetActor()->Tags[1];	// assign a color tag in BP i.e. ("Blue")
+			Hit.GetActor()->Destroy();
+			IncreaseAmmo(EnemyColorTag);
+		}
+	}
+}
+
+void APlayerCharacterBase::IncreaseAmmo(FName ColorTag)
+{
+	for(auto Projectile : ProjectileMap)
+	{
+		if(ColorTag == ProjectileMap.Find(Projectile.Key)->Name)
+		{
+			int32& AmmoIncrease = ProjectileMap.Find(Projectile.Key)->AmmoCount;
+			AmmoIncrease++;
+			UE_LOG(LogTemp, Warning, TEXT("%s: %i"), *ColorTag.ToString(), AmmoIncrease);
+			break;
+		}
+	}
+}
+
+
 
 // INTERFACE EVENTS //
 void APlayerCharacterBase::DamagePlayer_Implementation(float Damage)
@@ -190,7 +271,6 @@ void APlayerCharacterBase::HealPlayer_Implementation(float Heal)
 	CurrentHealth += Heal;
 	UE_LOG(LogTemp, Warning, TEXT("Current Health: %f"), CurrentHealth);
 }
-
 
 
 void APlayerCharacterBase::ActivateMelee()

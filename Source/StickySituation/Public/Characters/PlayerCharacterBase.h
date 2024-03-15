@@ -81,7 +81,13 @@ public:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Animation")
 	UAnimInstance* AnimInstance = nullptr;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Animation")
+	UAnimMontage* CollectAmmoMontage = nullptr;
+	UFUNCTION(BlueprintCallable)
+	virtual void CollectAmmo();
+	UFUNCTION(BlueprintCallable)
+	virtual void IncreaseAmmo(FName ColorTag);
+	
 	virtual void ActivateMelee();
 	virtual void DeactivateMelee();
 

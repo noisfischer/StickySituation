@@ -35,12 +35,14 @@ void AEnemyBase::StunEnemy_Implementation(float StunTime)
 {
 	GetCharacterMovement()->SetMovementMode(MOVE_None);
 	GetWorld()->GetTimerManager().SetTimer(StunTimer, this, &AEnemyBase::StunFinished, StunTime, false);
+	Tags.Add("stunned");
 	UE_LOG(LogTemp, Warning, TEXT("Enemy Stunned"));
 }
 
 void AEnemyBase::StunFinished()
 {
 	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+	Tags.Remove("stunned");
 	UE_LOG(LogTemp, Warning, TEXT("Enemy Un-Stunned"));
 }
 
