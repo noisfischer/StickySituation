@@ -83,6 +83,8 @@ APlayerCharacterBase::APlayerCharacterBase()
 	CharacterSkillTreeComponent->OnSkillActivated.AddDynamic(this, &APlayerCharacterBase::HandleSkillActivated);
 	CharacterSkillTreeComponent->OnSkillDeactivated.AddDynamic(this, &APlayerCharacterBase::HandleSkillDeactivated);
 
+	CurrentState = EPlayerState::Neutral;
+	
 	ProjectileDataTablePath = TEXT("/Game/DataTables/ProjectileData");
 }
 

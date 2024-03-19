@@ -49,6 +49,8 @@ class APlayerCharacterBase : public ACharacter, public ICharacterInterface
 public:
 	// CONSTRUCTOR DECLARATION //
 	APlayerCharacterBase();
+
+	EPlayerState CurrentState;
 	
 	UFUNCTION(BlueprintCallable)
 	virtual void SaveCharacterData();

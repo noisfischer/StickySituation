@@ -86,6 +86,7 @@ void ASkillTreeHub::InputToInteract()
 		PlayerRef->GetCharacterMovement()->StopMovementImmediately();	// Prevents cam misplacement
 		PlayerRef->GetController()->SetIgnoreMoveInput(true);
 		PlayerRef->GetController()->SetIgnoreLookInput(true);
+		PlayerRef->CurrentState = EPlayerState::Busy;
 		
 		FInputModeUIOnly CurrentInputMode;
 		UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(CurrentInputMode);
@@ -122,6 +123,7 @@ void ASkillTreeHub::TimelineFinished()
 		
 		PlayerRef->GetController()->SetIgnoreMoveInput(false);
 		PlayerRef->GetController()->SetIgnoreLookInput(false);
+		PlayerRef->CurrentState = EPlayerState::Neutral;
 
 		bHubInUse = false;
 		bCameraTransitionActive = false;
