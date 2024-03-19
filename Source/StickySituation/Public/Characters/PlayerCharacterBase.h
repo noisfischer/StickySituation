@@ -50,6 +50,7 @@ public:
 	// CONSTRUCTOR DECLARATION //
 	APlayerCharacterBase();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player")
 	EPlayerState CurrentState;
 	
 	UFUNCTION(BlueprintCallable)
