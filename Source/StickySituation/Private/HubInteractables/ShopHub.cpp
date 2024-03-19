@@ -57,3 +57,21 @@ void AShopHub::LoadShopData()
 		UE_LOG(LogTemp, Warning, TEXT("ShopData loaded successfully."));
 	}
 }
+
+void AShopHub::PurchaseItem(FString ItemName)
+{
+	ShopDataMap.Find(ItemName)->bPurchased = true;
+	SaveShopData();
+}
+
+void AShopHub::ActivateItem(FString ItemName)
+{
+	ShopDataMap.Find(ItemName)->bEquipped = true;
+	SaveShopData();
+}
+
+void AShopHub::DeactivateItem(FString ItemName)
+{
+	ShopDataMap.Find(ItemName)->bEquipped = false;
+	SaveShopData();
+}

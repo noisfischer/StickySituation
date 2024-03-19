@@ -21,4 +21,11 @@ public:
 	virtual void SaveShopData();
 	UFUNCTION(BlueprintCallable)
 	virtual void LoadShopData();
+
+	UFUNCTION(BlueprintCallable)
+	virtual void PurchaseItem(FString ItemName);
+	UFUNCTION(BlueprintCallable)
+	virtual void ActivateItem(FString ItemName);
+	UFUNCTION(BlueprintCallable)
+	virtual void DeactivateItem(FString ItemName);
 };
