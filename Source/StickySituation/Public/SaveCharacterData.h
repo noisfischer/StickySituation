@@ -28,4 +28,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = "Character")
 	float Currency;
+
+	
+	UPROPERTY(VisibleAnywhere, Category= "InteractableHubBase")
+	TMap<FString, FShopItems> SavedShopItemStates;
 };

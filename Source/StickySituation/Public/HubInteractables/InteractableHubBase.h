@@ -60,6 +60,7 @@ public:
 	bool bHubInUse = false;
 	bool bHubAvailable = false;
 
+
 protected:
 	virtual void BeginPlay() override;
 

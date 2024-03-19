@@ -46,3 +46,22 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsActive = false;
 };
+
+USTRUCT(BlueprintType)
+struct FShopItems : public FTableRowBase
+{
+	GENERATED_USTRUCT_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString Name;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Price = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bPurchased = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bEquipped = false;
+};
