@@ -27,9 +27,9 @@ public:
 
 	UFUNCTION()
 	virtual void ActivateGrapple(
-		FVector StartLocation,
-		FRotator Rotation,
-		FVector EndLocation
+		const FVector& StartLocation,
+		const FRotator& Rotation,
+		const FVector& EndLocation
 		);
 
 	UFUNCTION()

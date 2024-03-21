@@ -16,7 +16,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
 	USphereComponent* SphereCollision;
 
-	TArray<AActor*> AffectedEnemies;
+	TArray<AActor*> AffectedEnemies; // ApplyAcidDamage takes care of this
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1 - DAMAGE")
 	FTimerHandle AcidDurationTimer;

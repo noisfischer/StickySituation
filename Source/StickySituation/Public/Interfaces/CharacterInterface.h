@@ -21,14 +21,14 @@ public:
 
 	// DAMAGE AND HEALTH EVENTS //
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void DamagePlayer(float Damage);
+	void DamagePlayer(const float Damage);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void HealPlayer(float Heal);
+	void HealPlayer(const float Heal);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void DamageEnemy(float Damage);
+	void DamageEnemy(const float Damage);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void StunEnemy(float StunTime);
+	void StunEnemy(const float StunTime);
 };

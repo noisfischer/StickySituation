@@ -17,7 +17,7 @@ void UGrappleComponent::BeginPlay()
 }
 
 
-void UGrappleComponent::ActivateGrapple(FVector StartLocation, FRotator Rotation, FVector EndLocation)
+void UGrappleComponent::ActivateGrapple(const FVector& StartLocation, const FRotator& Rotation, const FVector& EndLocation)
 {
 	if(!GrappleHookBlueprint)
 	{

@@ -131,7 +131,7 @@ void APlayerCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacterBase::Look);
 
 		// Interact
-		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &APlayerCharacterBase::OnInteractActionTriggered);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &APlayerCharacterBase::PerformCollectAmmo);
 
 	}
 	else
@@ -176,10 +176,19 @@ void APlayerCharacterBase::Look(const FInputActionValue& Value)
 	}
 }
 
-void APlayerCharacterBase::OnInteractActionTriggered()
+void APlayerCharacterBase::PerformCollectAmmo()
 {
 	if(CollectAmmoMontage != nullptr)
-		PlayAnimMontage(CollectAmmoMontage, 1.f, "None");
+	{
+		switch(CurrentState)
+		{
+		case EPlayerState::Neutral:
+			PlayAnimMontage(CollectAmmoMontage, 1.f, "None");
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 void APlayerCharacterBase::CollectAmmo()
@@ -245,7 +254,7 @@ void APlayerCharacterBase::CollectAmmo()
 	}
 }
 
-void APlayerCharacterBase::IncreaseAmmo(FName ColorTag)
+void APlayerCharacterBase::IncreaseAmmo(const FName& ColorTag)
 {
 	for(auto Projectile : ProjectileMap)
 	{
@@ -262,13 +271,13 @@ void APlayerCharacterBase::IncreaseAmmo(FName ColorTag)
 
 
 // INTERFACE EVENTS //
-void APlayerCharacterBase::DamagePlayer_Implementation(float Damage)
+void APlayerCharacterBase::DamagePlayer_Implementation(const float Damage)
 {
 	CurrentHealth -= Damage;
 	UE_LOG(LogTemp, Warning, TEXT("Player Current Health: %f"), CurrentHealth);
 }
 
-void APlayerCharacterBase::HealPlayer_Implementation(float Heal)
+void APlayerCharacterBase::HealPlayer_Implementation(const float Heal)
 {
 	CurrentHealth += Heal;
 	UE_LOG(LogTemp, Warning, TEXT("Current Health: %f"), CurrentHealth);
@@ -343,13 +352,15 @@ float APlayerCharacterBase::PlayAnimMontage(UAnimMontage* AnimMontage, float InP
 	if(AnimMontage && AnimInstance)
 	{
 		MontageLength = AnimInstance->Montage_Play(AnimMontage, InPlayRate);
+		CurrentState = EPlayerState::Busy;
 	}
 	return MontageLength;
 }
 
 void APlayerCharacterBase::OnMontageFinished(UAnimMontage* Montage, bool bMontageInterrupted)
 {
-	bAttacking = false;
+	if(CurrentState != EPlayerState::CanInteract)
+		CurrentState = EPlayerState::Neutral;
 }
 
 void APlayerCharacterBase::PlaySound(USoundBase* Sound)

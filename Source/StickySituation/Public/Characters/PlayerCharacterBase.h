@@ -89,7 +89,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void CollectAmmo();
 	UFUNCTION(BlueprintCallable)
-	virtual void IncreaseAmmo(FName ColorTag);
+	virtual void IncreaseAmmo(const FName& ColorTag);
 	
 	virtual void ActivateMelee();
 	virtual void DeactivateMelee();
@@ -141,9 +141,9 @@ public:
 
 
 	// INTERFACE EVENTS //
-	virtual void DamagePlayer_Implementation(float Damage) override;
+	virtual void DamagePlayer_Implementation(const float Damage) override;
 
-	virtual void HealPlayer_Implementation(float Heal) override;
+	virtual void HealPlayer_Implementation(const float Heal) override;
 
 	UFUNCTION()
 	virtual void OnMontageFinished(UAnimMontage* Montage, bool bMontageInterrupted);
@@ -186,15 +186,13 @@ protected:
 	void LoadProjectileData();
 	
 	void SpawnProjectile(float DamageMultiplier, float SpeedMultiplier);
-	
-	bool bAttacking = false;
 
 	// ENHANCED INPUT FUNCTION BINDINGS
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 
 	UFUNCTION()
-	virtual void OnInteractActionTriggered();
+	virtual void PerformCollectAmmo();
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void BeginPlay() override;

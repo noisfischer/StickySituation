@@ -70,10 +70,16 @@ void AJeremy::InitializeAmmo()
 
 void AJeremy::Melee()
 {
-	if (!bAttacking)
+	if (MeleeMontage != nullptr)
 	{
-		bAttacking = true;
-		PlayAnimMontage(MeleeMontage, MeleeSpeed, FName("None"));
+		switch(CurrentState)
+		{
+		case EPlayerState::Neutral:
+			PlayAnimMontage(MeleeMontage, MeleeSpeed, FName("None"));
+			break;
+		default:
+			break;
+		}
 	}
 }
 

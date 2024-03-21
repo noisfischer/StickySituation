@@ -29,10 +29,10 @@ public:
 	
 	// INTERFACE EVENTS //
 	UFUNCTION()
-	virtual void DamageEnemy_Implementation(float Damage) override;
+	virtual void DamageEnemy_Implementation(const float Damage) override;
 	
 	UFUNCTION()
-	virtual void StunEnemy_Implementation(float StunTime) override;
+	virtual void StunEnemy_Implementation(const float StunTime) override;
 	
 	UFUNCTION()
 	virtual void StunFinished();
