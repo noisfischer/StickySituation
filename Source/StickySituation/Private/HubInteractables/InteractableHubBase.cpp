@@ -63,8 +63,9 @@ void AInteractableHubBase::OnBeginOverlap(UPrimitiveComponent* OverlappedCompone
 	if(OtherActor == PlayerRef)
 	{
 		bHubAvailable = true;
-		PlayerRef->CurrentState = EPlayerState::CanInteract;
-		UE_LOG(LogTemp, Warning, TEXT("CAN INTERACT"));
+		
+		if(PlayerRef->CurrentState != EPlayerState::Hub)
+			PlayerRef->CurrentState = EPlayerState::CanInteract;
 
 		if(HubMenu->GetWidgetClass() == nullptr)
 			SetMenu();
@@ -76,8 +77,9 @@ void AInteractableHubBase::OnEndOverlap(UPrimitiveComponent* OverlappedComponent
 	if(OtherActor == PlayerRef)
 	{
 		bHubAvailable = false;
-		PlayerRef->CurrentState = EPlayerState::Neutral;
-		UE_LOG(LogTemp, Warning, TEXT("NEUTRAL - end overlap"));
+		
+		if(PlayerRef->CurrentState != EPlayerState::Hub)
+			PlayerRef->CurrentState = EPlayerState::Neutral;
 	}
 }
 

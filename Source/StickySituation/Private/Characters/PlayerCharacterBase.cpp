@@ -1,5 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #include "Characters/PlayerCharacterBase.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
@@ -13,6 +11,7 @@
 #include "InputActionValue.h"
 #include "NiagaraFunctionLibrary.h"
 #include "SPinValueInspector.h"
+#include "GameModes/StickySituationGameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "Projectiles/RedProjectile.h"
 #include "Projectiles/GreenProjectile.h"
@@ -91,10 +90,8 @@ APlayerCharacterBase::APlayerCharacterBase()
 
 void APlayerCharacterBase::BeginPlay()
 {
-	// Call the base class  
 	Super::BeginPlay();
 
-	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
@@ -106,6 +103,12 @@ void APlayerCharacterBase::BeginPlay()
 	LoadCharacterData();
 	LoadCurrency();
 	LoadProjectileData();
+
+	AStickySituationGameMode* CurrentGameMode = Cast<AStickySituationGameMode>(UGameplayStatics::GetGameMode(this));
+	if (CurrentGameMode)
+	{
+		
+	}
 
 	// MELEE ANIMATION SETUP //
 	MeleeWeapon_Collision->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacterBase::OnWeaponCollisionOverlap);

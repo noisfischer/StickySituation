@@ -70,6 +70,9 @@ void AJeremy::InitializeAmmo()
 
 void AJeremy::StartSlingshotPull()
 {
+	if(CurrentState == EPlayerState::Hub)
+		return;
+	
 	if(ProjectileMap.Find(CurrentAmmoName)->AmmoCount != 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Slingshot Charge Begins"));
