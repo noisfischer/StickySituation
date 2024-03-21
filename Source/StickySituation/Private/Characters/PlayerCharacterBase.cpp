@@ -104,12 +104,6 @@ void APlayerCharacterBase::BeginPlay()
 	LoadCurrency();
 	LoadProjectileData();
 
-	AStickySituationGameMode* CurrentGameMode = Cast<AStickySituationGameMode>(UGameplayStatics::GetGameMode(this));
-	if (CurrentGameMode)
-	{
-		
-	}
-
 	// MELEE ANIMATION SETUP //
 	MeleeWeapon_Collision->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacterBase::OnWeaponCollisionOverlap);
 	AnimInstance = GetMesh()->GetAnimInstance();
