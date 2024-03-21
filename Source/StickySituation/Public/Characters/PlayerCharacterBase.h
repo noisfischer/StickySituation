@@ -79,6 +79,18 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Mesh)
 	UCapsuleComponent* MeleeWeapon_Collision;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* MeleeAction = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
+	UAnimMontage* MeleeMontage = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Melee")
+	float MeleeSpeed = 1.f;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Melee")
+	float MeleeDamage = 1.f;
+
+	UFUNCTION(Blueprintable)
+	virtual void Melee();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
 	USkillTreeComponent* CharacterSkillTreeComponent;
 	

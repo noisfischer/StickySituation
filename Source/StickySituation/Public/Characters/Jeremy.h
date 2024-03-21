@@ -34,15 +34,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* GrappleAction = nullptr;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	UInputAction* MeleeAction = nullptr;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
-	UAnimMontage* MeleeMontage = nullptr;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Melee")
-	float MeleeSpeed = 1.f;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Melee")
-	float MeleeDamage = 1.f;
-	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Grapple")
 	UGrappleComponent* GrappleComponent;
 	
@@ -57,8 +48,6 @@ public:
 	USoundBase* SwitchAmmo = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SFX")
 	USoundBase* GrappleUnavailable = nullptr;
-
-	
 
 protected:
 
@@ -88,10 +77,6 @@ protected:
 	FTimerHandle GrappleRefreshTimer;
 	void Grapple();
 	void GrappleRefresh();
-
-	void Melee();
 	
-	virtual void OnWeaponCollisionOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
-
 	virtual void InitializeUnlockedSkills() override;
 };

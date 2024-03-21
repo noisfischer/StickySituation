@@ -68,31 +68,6 @@ void AJeremy::InitializeAmmo()
 	// Make any changes here like increasing ammo count, etc.
 }
 
-void AJeremy::Melee()
-{
-	if (MeleeMontage != nullptr)
-	{
-		switch(CurrentState)
-		{
-		case EPlayerState::Neutral:
-			PlayAnimMontage(MeleeMontage, MeleeSpeed, FName("None"));
-			break;
-		default:
-			break;
-		}
-	}
-}
-
-void AJeremy::OnWeaponCollisionOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	Super::OnWeaponCollisionOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
-
-	if(OtherActor->ActorHasTag("enemy"))
-		Execute_DamageEnemy(OtherActor, MeleeDamage);
-}
-
-
 void AJeremy::StartSlingshotPull()
 {
 	if(ProjectileMap.Find(CurrentAmmoName)->AmmoCount != 0)

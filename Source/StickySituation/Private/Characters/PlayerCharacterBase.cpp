@@ -120,19 +120,12 @@ void APlayerCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
-		// Jumping
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
-
-		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacterBase::Move);
-
-		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacterBase::Look);
-
-		// Interact
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &APlayerCharacterBase::PerformCollectAmmo);
-
+		EnhancedInputComponent->BindAction(MeleeAction, ETriggerEvent::Triggered, this, &APlayerCharacterBase::Melee);
 	}
 	else
 	{
@@ -178,6 +171,9 @@ void APlayerCharacterBase::Look(const FInputActionValue& Value)
 
 void APlayerCharacterBase::PerformCollectAmmo()
 {
+	if(CurrentState == EPlayerState::Hub)
+		return;
+	
 	if(CollectAmmoMontage != nullptr)
 	{
 		switch(CurrentState)
@@ -294,20 +290,35 @@ void APlayerCharacterBase::DeactivateMelee()
 	MeleeWeapon_Collision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
+void APlayerCharacterBase::Melee()
+{
+	if (MeleeMontage != nullptr)
+	{
+		switch(CurrentState)
+		{
+		case EPlayerState::Neutral:
+			PlayAnimMontage(MeleeMontage, MeleeSpeed, FName("None"));
+			break;
+		default:
+			break;
+		}
+	}
+}
+
 void APlayerCharacterBase::OnWeaponCollisionOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                                    UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if(OtherActor->ActorHasTag("enemy"))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("OVERLAP"));
-		
 		float RandomNum = FMath::RandRange(0, 1);
 		if(RandomNum <= StunChance)		// Default 20% chance (no skill active)
 		{
 			Execute_StunEnemy(OtherActor, StunTime);	// Default 5 seconds (no skill active)
 			UE_LOG(LogTemp, Warning, TEXT("Stun Time: %f"), StunTime);
+			UE_LOG(LogTemp, Warning, TEXT("Stun Chance: %f"), StunChance);
 		}
-		UE_LOG(LogTemp, Warning, TEXT("Stun Chance: %f"), StunChance);
+		else
+			Execute_DamageEnemy(OtherActor, MeleeDamage);
 	}
 }
 
@@ -359,7 +370,7 @@ float APlayerCharacterBase::PlayAnimMontage(UAnimMontage* AnimMontage, float InP
 
 void APlayerCharacterBase::OnMontageFinished(UAnimMontage* Montage, bool bMontageInterrupted)
 {
-	if(CurrentState != EPlayerState::CanInteract)
+	if(CurrentState != EPlayerState::CanInteract)	// For when player is near an interactable
 		CurrentState = EPlayerState::Neutral;
 }
 
